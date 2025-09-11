@@ -1,0 +1,5 @@
+﻿  Sample_main.cpp
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork1\ACG_HomeWork\Sample_main.cpp(129,48): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork1\ACG_HomeWork\Sample_main.cpp(204,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork1\ACG_HomeWork\Sample_main.cpp(205,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  ACG_HomeWork.vcxproj -> D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork1\x64\Debug\ACG_HomeWork.exe

@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\Sample_main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Sample_main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\FragmentShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\FragmentShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\VertexShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\VertexShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FragmentShader.txt",
+              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\FragmentShader.txt",
+              "RelativeDocumentMoniker": "ACG_HomeWork\\FragmentShader.txt",
+              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\FragmentShader.txt",
+              "RelativeToolTip": "ACG_HomeWork\\FragmentShader.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-09-11T06:20:43.102Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "VertexShader.txt",
+              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\VertexShader.txt",
+              "RelativeDocumentMoniker": "ACG_HomeWork\\VertexShader.txt",
+              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\VertexShader.txt",
+              "RelativeToolTip": "ACG_HomeWork\\VertexShader.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-09-11T06:20:42.399Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Sample_main.cpp",
+              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\Sample_main.cpp",
+              "RelativeDocumentMoniker": "ACG_HomeWork\\Sample_main.cpp",
+              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork1\\ACG_HomeWork\\Sample_main.cpp",
+              "RelativeToolTip": "ACG_HomeWork\\Sample_main.cpp",
+              "ViewState": "AgIAANIAAAAAAAAAAAAAANYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-09-11T06:01:14.382Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
