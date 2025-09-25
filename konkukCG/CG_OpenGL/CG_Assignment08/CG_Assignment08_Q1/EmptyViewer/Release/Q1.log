@@ -1,0 +1,15 @@
+﻿  load_mesh.cpp
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\load_mesh.cpp(107,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\load_mesh.cpp(108,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\load_mesh.cpp(109,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\load_mesh.cpp(123,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\load_mesh.cpp(124,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\load_mesh.cpp(125,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Q1.cpp
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\Q1.cpp(156,26): warning C4018: '<': signed/unsigned mismatch
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\Q1.cpp(161,26): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 436 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Q1.vcxproj -> D:\GitClone\CG_Assignment08\CG_Assignment08_Q1\bin\Q1.exe

@@ -1,0 +1,9 @@
+﻿  Main_PhongShader.cpp
+D:\GitClone\CG_Assignment07\CG_Assignment7_ClassSampleCodeVersion\EmptyViewer\Main_PhongShader.cpp(234,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment07\CG_Assignment7_ClassSampleCodeVersion\EmptyViewer\Main_PhongShader.cpp(235,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating code
+  0 of 395 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  EmptyViewer.vcxproj -> D:\GitClone\CG_Assignment07\CG_Assignment7_ClassSampleCodeVersion\bin\EmptyViewer.exe
