@@ -1,13 +1,15 @@
-#version 400 core
+#version 330 core
+
+layout(location = 0) in vec3 inPos; // Vertex Position
+layout(location = 1) in vec3 inNormal; // Vertex Normal
+layout(location = 2) in vec2 inTexCoord; // Texture Coordinate
 
 uniform mat4 wMat;
 
-in vec3 inPos;
-in vec3 inColor;
+out vec2 TexCoord;
 
-out vec3 fColor;
 void main()
-{	
-	gl_Position = wMat * vec4 (inPos, 1);
-	fColor = inColor;
+{
+	gl_Position = wMat * vec4(inPos, 1.0);
+	TexCoord = inTexCoord;
 }

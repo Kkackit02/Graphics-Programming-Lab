@@ -21,7 +21,6 @@ Geometry::Geometry(GLuint activeProgram)
 	m_World = glm::mat4(1.0f);
     InitGL();
     ChangeProgramGL(activeProgram);
-    
 }
 
 Geometry::~Geometry()
@@ -34,105 +33,25 @@ void Geometry::SetPosition(glm::vec3 pos)
 	m_World = glm::translate(m_World, pos);	
 }
 
-
-
-GLfloat cubeVertices[] = {
-	0.1f, 0.1f,-0.1f, // triangle 2 : begin
-	-0.1f,-0.1f,-0.1f,
-	-0.1f, 0.1f,-0.1f, // triangle 2 : end
-	0.1f, 0.1f,-0.1f,
-	0.1f,-0.1f,-0.1f,
-	-0.1f,-0.1f,-0.1f,
-
-	-0.1f,-0.1f,-0.1f, // triangle 1 : begin
-	-0.1f,-0.1f, 0.1f,
-	-0.1f, 0.1f, 0.1f, // triangle 1 : end
-	-0.1f,-0.1f,-0.1f,
-	-0.1f, 0.1f, 0.1f,
-	-0.1f, 0.1f,-0.1f,
-
-	-0.1f, 0.1f, 0.1f,
-	-0.1f,-0.1f, 0.1f,
-	0.1f,-0.1f, 0.1f,
-	0.1f, 0.1f, 0.1f,
-	-0.1f, 0.1f, 0.1f,
-	0.1f,-0.1f, 0.1f,
-
-	0.1f, 0.1f, 0.1f,
-	0.1f,-0.1f,-0.1f,
-	0.1f, 0.1f,-0.1f,
-	0.1f,-0.1f,-0.1f,
-	0.1f, 0.1f, 0.1f,
-	0.1f,-0.1f, 0.1f,
-
-	0.1f,-0.1f, 0.1f,
-	-0.1f,-0.1f,-0.1f,
-	0.1f,-0.1f,-0.1f,
-	0.1f,-0.1f, 0.1f,
-	-0.1f,-0.1f, 0.1f,
-	-0.1f,-0.1f,-0.1f,
-
-	0.1f, 0.1f, 0.1f,
-	0.1f, 0.1f,-0.1f,
-	-0.1f, 0.1f,-0.1f,
-	0.1f, 0.1f, 0.1f,
-	-0.1f, 0.1f,-0.1f,
-	-0.1f, 0.1f, 0.1f,
-};
-
-GLfloat cubeColors[] = {
-	1.0, 0.0, 0.0, 1.0,
-	1.0, 0.0, 0.0, 1.0,
-	1.0, 0.0, 0.0, 1.0,
-	1.0, 0.0, 0.0, 1.0,
-	1.0, 0.0, 0.0, 1.0,
-	1.0, 0.0, 0.0, 1.0,
-
-	0.0, 1.0, 0.0, 1.0,
-	0.0, 1.0, 0.0, 1.0,
-	0.0, 1.0, 0.0, 1.0,
-	0.0, 1.0, 0.0, 1.0,
-	0.0, 1.0, 0.0, 1.0,
-	0.0, 1.0, 0.0, 1.0,
-
-	0.0, 0.0, 1.0, 1.0,
-	0.0, 0.0, 1.0, 1.0,
-	0.0, 0.0, 1.0, 1.0,
-	0.0, 0.0, 1.0, 1.0,
-	0.0, 0.0, 1.0, 1.0,
-	0.0, 0.0, 1.0, 1.0,
-
-	1.0, 1.0, 0.0, 1.0,
-	1.0, 1.0, 0.0, 1.0,
-	1.0, 1.0, 0.0, 1.0,
-	1.0, 1.0, 0.0, 1.0,
-	1.0, 1.0, 0.0, 1.0,
-	1.0, 1.0, 0.0, 1.0,
-
-	1.0, 0.0, 1.0, 1.0,
-	1.0, 0.0, 1.0, 1.0,
-	1.0, 0.0, 1.0, 1.0,
-	1.0, 0.0, 1.0, 1.0,
-	1.0, 0.0, 1.0, 1.0,
-	1.0, 0.0, 1.0, 1.0,
-
-	0.0, 1.0, 1.0, 1.0,
-	0.0, 1.0, 1.0, 1.0,
-	0.0, 1.0, 1.0, 1.0,
-	0.0, 1.0, 1.0, 1.0,
-	0.0, 1.0, 1.0, 1.0,
-	0.0, 1.0, 1.0, 1.0,
-};
-
-void Geometry::CreateCube()
+void Geometry::InitFromMesh(const objl::Mesh& mesh)
 {
 	m_GLMode = GL_TRIANGLES;
-	m_NumVertices = sizeof(cubeVertices) / (3 * sizeof(float));
+	m_NumIndices = mesh.Indices.size();
+
+	// Material
+	m_Ka = glm::vec3(mesh.MeshMaterial.Ka.X, mesh.MeshMaterial.Ka.Y, mesh.MeshMaterial.Ka.Z);
+	m_Kd = glm::vec3(mesh.MeshMaterial.Kd.X, mesh.MeshMaterial.Kd.Y, mesh.MeshMaterial.Kd.Z);
+	m_Ks = glm::vec3(mesh.MeshMaterial.Ks.X, mesh.MeshMaterial.Ks.Y, mesh.MeshMaterial.Ks.Z);
+
+	// VBO for vertex data
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOIDs[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBOIDs[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeColors), cubeColors, GL_STATIC_DRAW);	
+	glBufferData(GL_ARRAY_BUFFER, mesh.Vertices.size() * sizeof(objl::Vertex), &mesh.Vertices[0], GL_STATIC_DRAW);
+
+	// VBO for index data
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBOIDs[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.Indices.size() * sizeof(unsigned int), &mesh.Indices[0], GL_STATIC_DRAW);
 }
+
 
 void Geometry::Draw()
 {
@@ -154,7 +73,7 @@ void Geometry::AnimateRotate(bool start)
 		if (passed > 100) // if longer than 100 ms has passed
 		{
 			int animAmount = passed / 100;
-			m_World = glm::rotate(m_World, animAmount * 0.1f, glm::vec3(1.0f, 1.0f, 1.0f));
+			m_World = glm::rotate(m_World, animAmount * 0.1f, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotate around Y-axis
 			m_AnimTime = curTime;
 		}
 	}
@@ -176,20 +95,36 @@ void Geometry::ChangeProgramGL(GLuint activeProgram)
 {
 	m_ProgramID = activeProgram;
 	glBindVertexArray(m_VAOID);
+
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOIDs[0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBOIDs[1]);
+
+	// Vertex Attributes
+	// Position
 	GLuint posAttribLoc = glGetAttribLocation(m_ProgramID, "inPos");
-	glVertexAttribPointer(posAttribLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(0));
+	glVertexAttribPointer(posAttribLoc, 3, GL_FLOAT, GL_FALSE, sizeof(objl::Vertex), (GLvoid*)offsetof(objl::Vertex, Position));
 	glEnableVertexAttribArray(posAttribLoc);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBOIDs[1]);
-	GLuint colAttribLoc = glGetAttribLocation(m_ProgramID, "inColor");
-	glVertexAttribPointer(colAttribLoc, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(0));
-	glEnableVertexAttribArray(colAttribLoc);
+
+	// Normal
+	GLuint normalAttribLoc = glGetAttribLocation(m_ProgramID, "inNormal");
+	glVertexAttribPointer(normalAttribLoc, 3, GL_FLOAT, GL_FALSE, sizeof(objl::Vertex), (GLvoid*)offsetof(objl::Vertex, Normal));
+	glEnableVertexAttribArray(normalAttribLoc);
+
+	// Texture Coordinate
+	GLuint texAttribLoc = glGetAttribLocation(m_ProgramID, "inTexCoord");
+	glVertexAttribPointer(texAttribLoc, 2, GL_FLOAT, GL_FALSE, sizeof(objl::Vertex), (GLvoid*)offsetof(objl::Vertex, TextureCoordinate));
+	glEnableVertexAttribArray(texAttribLoc);
 }
 void Geometry::DrawGL()
 {
+	glUseProgram(m_ProgramID);
+
 	GLuint wmatID = glGetUniformLocation(m_ProgramID, "wMat");
-	glUniformMatrix4fv(wmatID, 1, GL_FALSE, glm::value_ptr(m_World));;
+	glUniformMatrix4fv(wmatID, 1, GL_FALSE, glm::value_ptr(m_World));
+
+	GLuint kdID = glGetUniformLocation(m_ProgramID, "Kd");
+	glUniform3fv(kdID, 1, glm::value_ptr(m_Kd));
 
 	glBindVertexArray(m_VAOID);
-	glDrawArrays(m_GLMode, 0, m_NumVertices);
+	glDrawElements(m_GLMode, m_NumIndices, GL_UNSIGNED_INT, 0);
 }
