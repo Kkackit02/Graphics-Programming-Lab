@@ -6,6 +6,8 @@
 #include <vector>
 #include <math.h>
 #include <chrono>
+#include <limits>
+#include <algorithm>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -22,6 +24,8 @@
 Geometry::Geometry(GLuint activeProgram)
 {    
 	m_World = glm::mat4(1.0f);
+    m_Y_RotationAngle = 0.0f;
+    m_CenterOffset = glm::vec3(0.0f);
     m_TextureID = 0; // Initialize texture ID
     InitGL();
     ChangeProgramGL(activeProgram);
@@ -34,7 +38,7 @@ Geometry::~Geometry()
 
 void Geometry::SetPosition(glm::vec3 pos)
 {
-	m_World = glm::translate(m_World, pos);	
+	m_World = glm::translate(glm::mat4(1.0f), pos);	
 }
 
 void Geometry::InitFromMesh(const objl::Mesh& mesh)
@@ -47,7 +51,7 @@ void Geometry::InitFromMesh(const objl::Mesh& mesh)
 	m_Kd = glm::vec3(mesh.MeshMaterial.Kd.X, mesh.MeshMaterial.Kd.Y, mesh.MeshMaterial.Kd.Z);
 	m_Ks = glm::vec3(mesh.MeshMaterial.Ks.X, mesh.MeshMaterial.Ks.Y, mesh.MeshMaterial.Ks.Z);
 
-    // Load texture if available
+ 
     if (!mesh.MeshMaterial.map_Kd.empty())
     {
         stbi_set_flip_vertically_on_load(true);
@@ -58,7 +62,6 @@ void Geometry::InitFromMesh(const objl::Mesh& mesh)
             glGenTextures(1, &m_TextureID);
             glBindTexture(GL_TEXTURE_2D, m_TextureID);
 
-            // Set texture wrapping/filtering options
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -71,18 +74,14 @@ void Geometry::InitFromMesh(const objl::Mesh& mesh)
             glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }
-        else
-        {
-            std::cout << "Failed to load texture: " << mesh.MeshMaterial.map_Kd << std::endl;
-        }
         stbi_image_free(data);
     }
 
-	// VBO for vertex data
+	//VBO 
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOIDs[0]);
 	glBufferData(GL_ARRAY_BUFFER, mesh.Vertices.size() * sizeof(objl::Vertex), &mesh.Vertices[0], GL_STATIC_DRAW);
 
-	// VBO for index data
+	//VBO 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBOIDs[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.Indices.size() * sizeof(unsigned int), &mesh.Indices[0], GL_STATIC_DRAW);
 }
@@ -105,16 +104,14 @@ void Geometry::AnimateRotate(bool start)
 
 		auto passedMS = std::chrono::duration_cast<std::chrono::milliseconds>(curTime - m_AnimTime);
 		long passed = passedMS.count();
-		if (passed > 100) // if longer than 100 ms has passed
+		if (passed > 100) 
 		{
 			int animAmount = passed / 100;
-			m_World = glm::rotate(m_World, animAmount * 0.1f, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotate around Y-axis
+			m_Y_RotationAngle -= animAmount * 0.1f; // 얼굴쪽으로 회전하도록 수정
 			m_AnimTime = curTime;
 		}
 	}
 }
-
-
 
 void Geometry::InitGL()
 {
@@ -162,7 +159,7 @@ void Geometry::DrawGL()
 
     if (m_TextureID != 0)
     {
-		glUniform1i(useTextureLoc, 1); // true
+		glUniform1i(useTextureLoc, 1);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_TextureID);
         GLuint texSamplerID = glGetUniformLocation(m_ProgramID, "textureSampler");
@@ -170,11 +167,13 @@ void Geometry::DrawGL()
     }
 	else
 	{
-		glUniform1i(useTextureLoc, 0); // false
+		glUniform1i(useTextureLoc, 0); 
 	}
 
 	GLuint wmatID = glGetUniformLocation(m_ProgramID, "wMat");
-	glUniformMatrix4fv(wmatID, 1, GL_FALSE, glm::value_ptr(m_World));
+	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), m_Y_RotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 finalWorld = m_World * rotationMatrix;
+	glUniformMatrix4fv(wmatID, 1, GL_FALSE, glm::value_ptr(finalWorld));
 
 	GLuint kdID = glGetUniformLocation(m_ProgramID, "Kd");
 	glUniform3fv(kdID, 1, glm::value_ptr(m_Kd));

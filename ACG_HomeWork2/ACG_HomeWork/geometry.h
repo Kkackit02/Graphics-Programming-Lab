@@ -14,6 +14,8 @@ public:
 	void AnimateRotate(bool start = false);
 public:
 	glm::mat4 m_World;
+	float m_Y_RotationAngle;
+	glm::vec3 m_CenterOffset;
 
 	// OpenGL Related
 

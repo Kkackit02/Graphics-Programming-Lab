@@ -103,7 +103,7 @@ void renderScene(void)
 	
     glUseProgram(programID);
 
-    // Pass Projection and View matrices to the shader
+    //Shader에 projection, View 행렬 보내기
     GLuint projID = glGetUniformLocation(programID, "projection");
     GLuint viewID = glGetUniformLocation(programID, "view");
     glUniformMatrix4fv(projID, 1, GL_FALSE, glm::value_ptr(projection));
@@ -121,17 +121,16 @@ void init()
 {
 	GLenum res = glewInit();
 	
-    glClearColor(0.8f, 0.8f, 0.8f, 1.0f); // Set background to a light grey
+    glClearColor(0.8f, 0.8f, 0.8f, 1.0f); // 기본 배경 색 설정
 	glEnable(GL_DEPTH_TEST);
 
 	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt");
 
-    // Setup Projection and View matrices
     projection = glm::perspective(glm::radians(45.0f), (float)g_windowWidth / (float)g_windowHeight, 0.1f, 100.0f);
     view = glm::lookAt(
-        glm::vec3(0, 5, 15), // Camera position in World Space
-        glm::vec3(0, 0, 0),  // and looks at the origin
-        glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
+        glm::vec3(0, 5, 15), // 카메라 포지션
+        glm::vec3(0, 0, 0),  // Lookat
+        glm::vec3(0, 1, 0)   // 상단 방향(Head)
     );
 
 	// Load .obj File
@@ -148,7 +147,7 @@ void init()
 	}
     else
     {
-        cout << "Failed to load PiggyBank.obj" << endl;
+        cout << "Failed to Load Pig" << endl;
     }
 
 	objl::Loader cubeLoader;
@@ -159,13 +158,13 @@ void init()
 			objl::Mesh curMesh = cubeLoader.LoadedMeshes[i];
 			Geometry* newGeom = new Geometry(programID);
 			newGeom->InitFromMesh(curMesh);
-			newGeom->SetPosition(glm::vec3(5.0f, 0.0f, 0.0f));
+			newGeom->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 			g_Scene.push_back(newGeom);
 		}
 	}
 	else
 	{
-		cout << "Failed to load cube.obj" << endl;
+		cout << "Failed to load Cube" << endl;
 	}
 }
 
@@ -193,7 +192,7 @@ int main(int argc, char **argv)
     g_windowHeight = 480;
 	glutInitWindowSize(g_windowWidth, g_windowHeight);
 
-	glutCreateWindow("Homework2 - PiggyBank");
+	glutCreateWindow("Homework2 : Cube, PiggyBank");
 
 	init();
 
