@@ -1,5 +1,16 @@
-﻿  main.cpp
+﻿  Geometry.cpp
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\OBJ_Loader.h(949,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Geometry.cpp')
+  
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(43,34): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(107,15): warning C4244: 'initializing': conversion from '_Rep' to 'long', possible loss of data
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(107,15): warning C4244:         with
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(107,15): warning C4244:         [
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(107,15): warning C4244:             _Rep=__int64
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(107,15): warning C4244:         ]
+  main.cpp
 D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\OBJ_Loader.h(949,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   (compiling source file 'main.cpp')
   
+  Generating Code...
   ACG_HomeWork.vcxproj -> D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\x64\Debug\ACG_HomeWork.exe

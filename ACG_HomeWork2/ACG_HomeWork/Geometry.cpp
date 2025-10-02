@@ -14,11 +14,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include "geometry.h"
 
 Geometry::Geometry(GLuint activeProgram)
 {    
 	m_World = glm::mat4(1.0f);
+    m_TextureID = 0; // Initialize texture ID
     InitGL();
     ChangeProgramGL(activeProgram);
 }
@@ -42,6 +46,37 @@ void Geometry::InitFromMesh(const objl::Mesh& mesh)
 	m_Ka = glm::vec3(mesh.MeshMaterial.Ka.X, mesh.MeshMaterial.Ka.Y, mesh.MeshMaterial.Ka.Z);
 	m_Kd = glm::vec3(mesh.MeshMaterial.Kd.X, mesh.MeshMaterial.Kd.Y, mesh.MeshMaterial.Kd.Z);
 	m_Ks = glm::vec3(mesh.MeshMaterial.Ks.X, mesh.MeshMaterial.Ks.Y, mesh.MeshMaterial.Ks.Z);
+
+    // Load texture if available
+    if (!mesh.MeshMaterial.map_Kd.empty())
+    {
+        stbi_set_flip_vertically_on_load(true);
+        int width, height, nrChannels;
+        unsigned char* data = stbi_load(mesh.MeshMaterial.map_Kd.c_str(), &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glGenTextures(1, &m_TextureID);
+            glBindTexture(GL_TEXTURE_2D, m_TextureID);
+
+            // Set texture wrapping/filtering options
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            GLenum format = GL_RGB;
+            if (nrChannels == 4)
+                format = GL_RGBA;
+
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture: " << mesh.MeshMaterial.map_Kd << std::endl;
+        }
+        stbi_image_free(data);
+    }
 
 	// VBO for vertex data
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOIDs[0]);
@@ -90,6 +125,10 @@ void Geometry::DeleteGL()
 {
 	glDeleteVertexArrays(1, &m_VAOID);
 	glDeleteBuffers(2, m_VBOIDs);
+    if (m_TextureID != 0)
+    {
+        glDeleteTextures(1, &m_TextureID);
+    }
 }
 void Geometry::ChangeProgramGL(GLuint activeProgram)
 {
@@ -118,6 +157,21 @@ void Geometry::ChangeProgramGL(GLuint activeProgram)
 void Geometry::DrawGL()
 {
 	glUseProgram(m_ProgramID);
+
+	GLuint useTextureLoc = glGetUniformLocation(m_ProgramID, "useTexture");
+
+    if (m_TextureID != 0)
+    {
+		glUniform1i(useTextureLoc, 1); // true
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, m_TextureID);
+        GLuint texSamplerID = glGetUniformLocation(m_ProgramID, "textureSampler");
+        glUniform1i(texSamplerID, 0);
+    }
+	else
+	{
+		glUniform1i(useTextureLoc, 0); // false
+	}
 
 	GLuint wmatID = glGetUniformLocation(m_ProgramID, "wMat");
 	glUniformMatrix4fv(wmatID, 1, GL_FALSE, glm::value_ptr(m_World));

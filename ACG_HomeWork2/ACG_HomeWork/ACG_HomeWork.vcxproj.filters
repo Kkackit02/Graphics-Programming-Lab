@@ -35,18 +35,12 @@
     <ClInclude Include="OBJ_Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\x64\Debug\FragmentShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="..\x64\Debug\Fur_FragmentShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="..\x64\Debug\Fur_GeomShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="..\x64\Debug\Fur_VertexShader.txt">
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="..\x64\Debug\VertexShader.txt">

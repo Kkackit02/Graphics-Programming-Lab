@@ -19,6 +19,7 @@ public:
 
 	GLuint m_VAOID;
 	GLuint m_VBOIDs[2];
+	GLuint m_TextureID;
 
 protected:
 	unsigned int m_NumIndices;

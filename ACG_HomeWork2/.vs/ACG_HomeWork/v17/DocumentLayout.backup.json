@@ -7,23 +7,12 @@
       "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\GitClone\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\examples\\1 - LoadAndPrint\\e1_loadandprint.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ACG_HomeWork\\examples\\1 - LoadAndPrint\\e1_loadandprint.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\geometry.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\geometry.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Geometry.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Geometry.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Scene.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Scene.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Geometry.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Geometry.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\VertexShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -34,12 +23,15 @@
       "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:x64\\Debug\\FragmentShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\Fur_FragmentShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:x64\\Debug\\Fur_FragmentShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\GitClone\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\Fur_VertexShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:x64\\Debug\\Fur_VertexShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\examples\\1 - LoadAndPrint\\e1_loadandprint.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ACG_HomeWork\\examples\\1 - LoadAndPrint\\e1_loadandprint.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\geometry.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\geometry.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Scene.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -62,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -70,19 +62,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SoundManager.cs",
-              "DocumentMoniker": "D:\\GitClone\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
-              "ToolTip": "D:\\GitClone\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
-              "RelativeToolTip": "..\\..\\..\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-02T07:06:57.882Z"
+              "DocumentIndex": 4,
+              "Title": "FragmentShader.txt",
+              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\FragmentShader.txt",
+              "RelativeDocumentMoniker": "x64\\Debug\\FragmentShader.txt",
+              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\FragmentShader.txt",
+              "RelativeToolTip": "x64\\Debug\\FragmentShader.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-10-02T04:00:07.658Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\main.cpp",
+              "RelativeDocumentMoniker": "ACG_HomeWork\\main.cpp",
+              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\main.cpp",
+              "RelativeToolTip": "ACG_HomeWork\\main.cpp",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAAAEEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-02T01:59:04.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "e1_loadandprint.cpp",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\examples\\1 - LoadAndPrint\\e1_loadandprint.cpp",
               "RelativeDocumentMoniker": "ACG_HomeWork\\examples\\1 - LoadAndPrint\\e1_loadandprint.cpp",
@@ -94,43 +100,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "FragmentShader.txt",
-              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\FragmentShader.txt",
-              "RelativeDocumentMoniker": "x64\\Debug\\FragmentShader.txt",
-              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\FragmentShader.txt",
-              "RelativeToolTip": "x64\\Debug\\FragmentShader.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-02T04:00:07.658Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "Fur_FragmentShader.txt",
-              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\Fur_FragmentShader.txt",
-              "RelativeDocumentMoniker": "x64\\Debug\\Fur_FragmentShader.txt",
-              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\Fur_FragmentShader.txt",
-              "RelativeToolTip": "x64\\Debug\\Fur_FragmentShader.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-02T04:00:05.905Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Fur_VertexShader.txt",
-              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\Fur_VertexShader.txt",
-              "RelativeDocumentMoniker": "x64\\Debug\\Fur_VertexShader.txt",
-              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\Fur_VertexShader.txt",
-              "RelativeToolTip": "x64\\Debug\\Fur_VertexShader.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-02T04:00:05.228Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "Scene.h",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Scene.h",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Scene.h",
@@ -142,7 +112,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "geometry.h",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\geometry.h",
               "RelativeDocumentMoniker": "ACG_HomeWork\\geometry.h",
@@ -154,20 +124,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "main.cpp",
-              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\main.cpp",
-              "RelativeDocumentMoniker": "ACG_HomeWork\\main.cpp",
-              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\main.cpp",
-              "RelativeToolTip": "ACG_HomeWork\\main.cpp",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-02T01:59:04.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "Scene.cpp",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Scene.cpp",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Scene.cpp",
@@ -175,23 +132,25 @@
               "RelativeToolTip": "ACG_HomeWork\\Scene.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-02T01:59:03.597Z"
+              "WhenOpened": "2025-10-02T01:59:03.597Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "Geometry.cpp",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Geometry.cpp",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Geometry.cpp",
               "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\ACG_HomeWork\\Geometry.cpp",
               "RelativeToolTip": "ACG_HomeWork\\Geometry.cpp",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAH4AAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAH0AAAAAAAAAAAAiwJQAAABqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-02T01:59:02.746Z"
+              "WhenOpened": "2025-10-02T01:59:02.746Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "VertexShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork2\\x64\\Debug\\VertexShader.txt",
               "RelativeDocumentMoniker": "x64\\Debug\\VertexShader.txt",
@@ -199,11 +158,24 @@
               "RelativeToolTip": "x64\\Debug\\VertexShader.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-02T04:00:10.471Z"
+              "WhenOpened": "2025-10-02T04:00:10.471Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 5,
+              "Title": "SoundManager.cs",
+              "DocumentMoniker": "D:\\GitClone\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
+              "ToolTip": "D:\\GitClone\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
+              "RelativeToolTip": "..\\..\\..\\plug-guardian-rush\\Assets\\Scripts\\Managers\\SoundManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-02T07:06:57.882Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "Geometry.cpp",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\OGLEX2\\Geometry.cpp",
               "RelativeDocumentMoniker": "..\\OGLEX2\\Geometry.cpp",
@@ -215,7 +187,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 11,
               "Title": "Fur_VertexShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\OGLEX2\\Fur_VertexShader.txt",
               "RelativeDocumentMoniker": "..\\OGLEX2\\Fur_VertexShader.txt",
@@ -227,7 +199,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 10,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\JungGeunnyeong\\Downloads\\EX01_Sample (1)\\main.cpp",
               "ToolTip": "C:\\Users\\JungGeunnyeong\\Downloads\\EX01_Sample (1)\\main.cpp",

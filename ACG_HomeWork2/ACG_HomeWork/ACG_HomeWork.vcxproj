@@ -27,12 +27,10 @@
     <ClInclude Include="geometry.h" />
     <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\x64\Debug\FragmentShader.txt" />
-    <Text Include="..\x64\Debug\Fur_FragmentShader.txt" />
-    <Text Include="..\x64\Debug\Fur_GeomShader.txt" />
-    <Text Include="..\x64\Debug\Fur_VertexShader.txt" />
     <Text Include="..\x64\Debug\VertexShader.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

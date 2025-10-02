@@ -26,7 +26,7 @@ GLuint programID;
 
 glm::mat4 projection, view;
 
-objl::Loader Loader;
+
 
 GLuint LoadShadersSub(GLuint shader_type, const char* file_path)
 {
@@ -135,11 +135,12 @@ void init()
     );
 
 	// Load .obj File
-	if (Loader.LoadFile("PiggyBank.obj"))
+	objl::Loader piggyLoader;
+	if (piggyLoader.LoadFile("PiggyBank.obj"))
 	{
-		for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
+		for (int i = 0; i < piggyLoader.LoadedMeshes.size(); i++)
 		{
-			objl::Mesh curMesh = Loader.LoadedMeshes[i];
+			objl::Mesh curMesh = piggyLoader.LoadedMeshes[i];
 			Geometry* newGeom = new Geometry(programID);
 			newGeom->InitFromMesh(curMesh);
 			g_Scene.push_back(newGeom);
@@ -149,6 +150,23 @@ void init()
     {
         cout << "Failed to load PiggyBank.obj" << endl;
     }
+
+	objl::Loader cubeLoader;
+	if (cubeLoader.LoadFile("cube.obj"))
+	{
+		for (int i = 0; i < cubeLoader.LoadedMeshes.size(); i++)
+		{
+			objl::Mesh curMesh = cubeLoader.LoadedMeshes[i];
+			Geometry* newGeom = new Geometry(programID);
+			newGeom->InitFromMesh(curMesh);
+			newGeom->SetPosition(glm::vec3(5.0f, 0.0f, 0.0f));
+			g_Scene.push_back(newGeom);
+		}
+	}
+	else
+	{
+		cout << "Failed to load cube.obj" << endl;
+	}
 }
 
 void Animate(int value)
