@@ -41,12 +41,12 @@ void Geometry::SetPosition(glm::vec3 pos)
 	m_World = glm::translate(glm::mat4(1.0f), pos);	
 }
 
-void Geometry::InitFromMesh(const objl::Mesh& mesh)
+void Geometry::InitFromMesh(const objl::Mesh& mesh) // 메쉬 Load
 {
 	m_GLMode = GL_TRIANGLES;
 	m_NumIndices = mesh.Indices.size();
 
-	// Material
+	// 불러온 Material 저장
 	m_Ka = glm::vec3(mesh.MeshMaterial.Ka.X, mesh.MeshMaterial.Ka.Y, mesh.MeshMaterial.Ka.Z);
 	m_Kd = glm::vec3(mesh.MeshMaterial.Kd.X, mesh.MeshMaterial.Kd.Y, mesh.MeshMaterial.Kd.Z);
 	m_Ks = glm::vec3(mesh.MeshMaterial.Ks.X, mesh.MeshMaterial.Ks.Y, mesh.MeshMaterial.Ks.Z);
@@ -92,7 +92,7 @@ void Geometry::Draw()
 	DrawGL();
 }
 
-void Geometry::AnimateRotate(bool start)
+void Geometry::AnimateRotate(bool start) // 회전을 위한 함수
 {
 	if (start == true)
 	{
