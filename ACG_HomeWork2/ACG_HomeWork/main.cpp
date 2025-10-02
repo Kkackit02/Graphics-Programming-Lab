@@ -11,6 +11,8 @@
 #include <GL/freeglut.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "OBJ_Loader.h"
 #include "geometry.h"
@@ -21,6 +23,8 @@ using namespace std;
 int g_windowWidth, g_windowHeight;
 
 GLuint programID;
+
+glm::mat4 projection, view;
 
 objl::Loader Loader;
 
@@ -97,6 +101,14 @@ void renderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+    glUseProgram(programID);
+
+    // Pass Projection and View matrices to the shader
+    GLuint projID = glGetUniformLocation(programID, "projection");
+    GLuint viewID = glGetUniformLocation(programID, "view");
+    glUniformMatrix4fv(projID, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(viewID, 1, GL_FALSE, glm::value_ptr(view));
+
 	for (int idx = 0; idx < g_Scene.size(); idx++)
 	{
 		g_Scene[idx]->Draw();
@@ -113,6 +125,14 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 
 	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt");
+
+    // Setup Projection and View matrices
+    projection = glm::perspective(glm::radians(45.0f), (float)g_windowWidth / (float)g_windowHeight, 0.1f, 100.0f);
+    view = glm::lookAt(
+        glm::vec3(0, 5, 15), // Camera position in World Space
+        glm::vec3(0, 0, 0),  // and looks at the origin
+        glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
+    );
 
 	// Load .obj File
 	if (Loader.LoadFile("PiggyBank.obj"))

@@ -4,12 +4,14 @@ layout(location = 0) in vec3 inPos; // Vertex Position
 layout(location = 1) in vec3 inNormal; // Vertex Normal
 layout(location = 2) in vec2 inTexCoord; // Texture Coordinate
 
-uniform mat4 wMat;
+uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 wMat; // world matrix
 
 out vec2 TexCoord;
 
 void main()
 {
-	gl_Position = wMat * vec4(inPos, 1.0);
+	gl_Position = projection * view * wMat * vec4(inPos, 1.0);
 	TexCoord = inTexCoord;
 }
