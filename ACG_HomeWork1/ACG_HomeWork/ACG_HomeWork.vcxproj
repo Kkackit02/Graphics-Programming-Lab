@@ -18,6 +18,25 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\FragmentShader.txt" />
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Fur_FragmentShader.txt" />
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Fur_GeomShader.txt" />
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Fur_VertexShader.txt" />
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\VertexShader.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Geometry.cpp" />
+    <ClCompile Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\main.cpp" />
+    <ClCompile Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Scene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\.DS_Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\geometry.h" />
+    <ClInclude Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Scene.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -136,13 +155,6 @@
       <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Sample_main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="FragmentShader.txt" />
-    <Text Include="VertexShader.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

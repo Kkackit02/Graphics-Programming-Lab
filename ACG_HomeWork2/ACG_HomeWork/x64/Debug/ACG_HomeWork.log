@@ -1,0 +1,10 @@
+﻿  Geometry.cpp
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(153,15): warning C4244: 'initializing': conversion from '_Rep' to 'long', possible loss of data
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(153,15): warning C4244:         with
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(153,15): warning C4244:         [
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(153,15): warning C4244:             _Rep=__int64
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\Geometry.cpp(153,15): warning C4244:         ]
+  main.cpp
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\ACG_HomeWork\main.cpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+  Generating Code...
+  ACG_HomeWork.vcxproj -> D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork2\x64\Debug\ACG_HomeWork.exe

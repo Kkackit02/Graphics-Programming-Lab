@@ -1,0 +1,13 @@
+#version 400 core
+
+uniform mat4 wMat;
+
+in vec3 inPos;
+in vec3 inColor;
+
+out vec3 fColor;
+void main()
+{	
+	gl_Position = wMat * vec4 (inPos, 1);
+	fColor = inColor;
+}

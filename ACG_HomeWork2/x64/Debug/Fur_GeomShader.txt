@@ -1,0 +1,31 @@
+#version 400 core
+layout (triangles) in;
+layout (line_strip, max_vertices = 4) out;
+
+in vec3 gColor[3];
+
+out vec3 fColor;
+void main()
+{
+    int max_step = 10;
+    float inc = 1.0f / float(max_step);
+    
+    vec3 faceNormal = cross(gl_in[1].gl_Position.xyz - gl_in[0].gl_Position.xyz, gl_in[2].gl_Position.xyz - gl_in[0].gl_Position.xyz);
+	for (int idxA = 0; idxA <= max_step; idxA++ )
+    {
+        for (int idxB = 0; idxB <= (max_step - idxA); idxB++)
+        {
+            float alpha = inc * float(idxA);
+            float beta = inc * float(idxB);
+            float gamma = 1.0f - alpha - beta;
+            gl_Position.xyz = alpha*gl_in[0].gl_Position.xyz + beta*gl_in[1].gl_Position.xyz + gamma*gl_in[2].gl_Position.xyz;
+            gl_Position.w = 1.0f;
+            //fColor = alpha*gColor[0] + beta*gl_in[1].gColor[1] + gamma*gl_in[2].gColor[2];
+            fColor = vec3(alpha, beta, gamma);
+            EmitVertex();
+            gl_Position.xyz += faceNormal;
+            EmitVertex();
+            EndPrimitive();
+        }
+    }
+}

@@ -15,16 +15,44 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sample_main.cpp">
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Fur_VertexShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\VertexShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\FragmentShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Fur_FragmentShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Fur_GeomShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShader.txt">
+    <None Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\.DS_Store">
       <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="VertexShader.txt">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\geometry.h">
       <Filter>Source Files</Filter>
-    </Text>
+    </ClInclude>
+    <ClInclude Include="C:\Users\JungGeunnyeong\Downloads\EX01_Sample (1)\Scene.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
