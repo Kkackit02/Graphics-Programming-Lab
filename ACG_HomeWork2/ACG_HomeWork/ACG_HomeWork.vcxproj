@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="geometry.h" />
+    <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
