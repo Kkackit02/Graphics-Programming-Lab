@@ -79,10 +79,7 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path,
     GLuint ProgramID = glCreateProgram();
     glAttachShader(ProgramID, VertexShaderID);
     glAttachShader(ProgramID, FragmentShaderID);
-    if (GeometryShaderID != 0)
-    {
-        glAttachShader(ProgramID, GeometryShaderID);
-    }
+    glAttachShader(ProgramID, GeometryShaderID);
     glLinkProgram(ProgramID);
     GLint Result = GL_FALSE;
     int InfoLogLength;
@@ -153,7 +150,7 @@ void init()
     glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
-	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt");
+	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt", "GeometryShader.txt");
 
     projection = glm::perspective(glm::radians(45.0f), (float)g_windowWidth / (float)g_windowHeight, 0.1f, 1000.0f);
     view = glm::lookAt(

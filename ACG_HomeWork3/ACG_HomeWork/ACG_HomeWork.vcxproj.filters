@@ -49,25 +49,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\x64\Debug\FragmentShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="..\x64\Debug\VertexShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="spline_control_points.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="Spline_FragmentShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="Spline_GeometryShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="Spline_VertexShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
     <Text Include="VertexShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="FragmentShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="GeometryShader.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
