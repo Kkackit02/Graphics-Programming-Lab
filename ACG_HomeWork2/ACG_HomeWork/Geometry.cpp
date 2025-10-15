@@ -14,10 +14,10 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/type_ptr.hpp> //glm - openGL 연결 함수
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb_image.h" // 이미지 로드 라이브러리는 opensource 사용
 
 #include "geometry.h"
 
@@ -54,7 +54,7 @@ void Geometry::InitFromMesh(const objl::Mesh& mesh) // 메쉬 Load
  
     if (!mesh.MeshMaterial.map_Kd.empty())
     {
-        stbi_set_flip_vertically_on_load(true);
+        stbi_set_flip_vertically_on_load(true); // 뒤집기
         int width, height, nrChannels;
         unsigned char* data = stbi_load(mesh.MeshMaterial.map_Kd.c_str(), &width, &height, &nrChannels, 0);
         if (data)

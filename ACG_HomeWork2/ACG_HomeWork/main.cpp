@@ -1,3 +1,4 @@
+//202112346 정근녕
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -14,7 +15,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "OBJ_Loader.h"
+#include "OBJ_Loader.h" // openSource 사용
+
+
 #include "geometry.h"
 #include "Scene.h"
 
@@ -23,7 +26,6 @@ using namespace std;
 int g_windowWidth, g_windowHeight;
 
 GLuint programID;
-
 glm::mat4 projection, view;
 
 
@@ -126,10 +128,10 @@ void init()
 
 	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt");
 
-    projection = glm::perspective(glm::radians(45.0f), (float)g_windowWidth / (float)g_windowHeight, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)g_windowWidth / (float)g_windowHeight, 0.1f, 1000.0f);
     view = glm::lookAt(
         glm::vec3(0, 5, 15), // 카메라 포지션
-        glm::vec3(0, 0, 0),  // Lookat
+        glm::vec3(0, 0, 0),  // Lookat point
         glm::vec3(0, 1, 0)   // 상단 방향(Head)
     );
 
@@ -140,9 +142,9 @@ void init()
 		for (int i = 0; i < piggyLoader.LoadedMeshes.size(); i++)
 		{
 			objl::Mesh curMesh = piggyLoader.LoadedMeshes[i];
-			Geometry* newGeom = new Geometry(programID);
-			newGeom->InitFromMesh(curMesh);
-			g_Scene.push_back(newGeom);
+			Geometry* geometryObject = new Geometry(programID);
+            geometryObject->InitFromMesh(curMesh);
+			g_Scene.push_back(geometryObject);
 		}
 	}
     else
@@ -156,10 +158,10 @@ void init()
 		for (int i = 0; i < cubeLoader.LoadedMeshes.size(); i++)
 		{
 			objl::Mesh curMesh = cubeLoader.LoadedMeshes[i];
-			Geometry* newGeom = new Geometry(programID);
-			newGeom->InitFromMesh(curMesh);
-			newGeom->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-			g_Scene.push_back(newGeom);
+			Geometry* geometryObject = new Geometry(programID);
+            geometryObject->InitFromMesh(curMesh);
+            geometryObject->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+			g_Scene.push_back(geometryObject);
 		}
 	}
 	else
