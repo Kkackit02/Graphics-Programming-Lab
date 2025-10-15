@@ -1,0 +1,208 @@
+### `main.cpp` 코드 분석
+
+**1. 전체적인 구조 및 흐름**
+
+`main.cpp` 파일은 OpenGL을 사용하여 3D 장면을 렌더링하는 애플리케이션의 핵심 로직을 담고 있습니다. 주요 기능은 다음과 같습니다.
+
+*   **초기화 (`init()` 함수)**: OpenGL 컨텍스트, 셰이더 프로그램, 3D 객체(돼지, 큐브), 스플라인을 설정합니다.
+*   **렌더링 (`renderScene()` 함수)**: 매 프레임마다 화면을 지우고, 모든 객체와 스플라인을 그립니다.
+*   **애니메이션 (`Animate()` 함수)**: 시간에 따라 객체와 스플라인의 애니메이션 상태를 업데이트합니다.
+*   **메인 루프 (`main()` 함수)**: 프로그램의 시작점이며, `freeglut`을 초기화하고 콜백 함수를 등록한 후 메인 루프를 시작합니다.
+
+**2. 주요 섹션별 분석**
+
+**2.1. 전역 변수 및 포함 파일**
+
+*   **포함 파일**: `OBJ_Loader.h`, `Object.h`, `Scene.h`, `Spline.h` 등 필요한 모든 헤더 파일이 포함되어 있습니다.
+*   **전역 변수**: 
+    *   `g_windowWidth`, `g_windowHeight`: 창 크기.
+    *   `programID`: 객체 렌더링에 사용되는 셰이더 프로그램 ID.
+    *   `projection`, `view`: 카메라의 투영 및 뷰 행렬.
+    *   `g_controlPoints`: 스플라인 제어점 데이터.
+    *   `g_spline`: `Spline` 클래스 인스턴스.
+    *   `g_splineAnimT`: 스플라인 애니메이션 진행도(0.0 ~ 1.0).
+
+**2.2. 셰이더 로딩 함수 (`LoadShadersSub`, `LoadShaders`)**
+
+*   `LoadShadersSub`: 개별 셰이더(정점, 프래그먼트, 지오메트리) 파일을 읽고 컴파일합니다. 컴파일 오류 발생 시 메시지를 출력합니다.
+*   `LoadShaders`: `LoadShadersSub`를 사용하여 여러 셰이더를 컴파일하고 하나의 셰이더 프로그램으로 링크합니다. 지오메트리 셰이더는 선택적으로 로드할 수 있도록 구현되어 있습니다.
+
+**2.3. 제어점 로딩 함수 (`loadControlPoints`)**
+
+*   `spline_control_points.txt` 파일에서 3차원 제어점들을 읽어 `g_controlPoints` 벡터에 저장합니다. 파일 로드 실패 시 오류 메시지를 출력합니다.
+
+**2.4. 렌더링 함수 (`renderScene`)**
+
+```cpp
+void renderScene(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glUseProgram(programID); // 객체 셰이더 프로그램 활성화
+    // 객체 셰이더에 공통적으로 적용되는 유니폼 (조명 위치, 카메라 위치) 설정
+    glUniform3f(glGetUniformLocation(programID, "LightPos"), 0.0f, 5.0f, 15.0f);
+    glUniform3f(glGetUniformLocation(programID, "viewPos"), 0.0f, 5.0f, 15.0f);
+
+    // 씬의 모든 객체를 순회하며 그리기
+    for (int idx = 0; idx < getScene().size(); idx++)
+    {
+        getScene()[idx]->Draw(view, projection); // 각 객체의 Draw 함수 호출
+    }
+
+    // 스플라인 그리기 (스플라인 Draw 함수가 자체 셰이더 관리)
+    if (g_spline != nullptr)
+    {
+        g_spline->Draw(view, projection);
+    }
+
+    glutSwapBuffers(); // 더블 버퍼 교체
+}
+```
+
+*   장면을 지우고(glClear), 객체 셰이더를 활성화한 후 공통 유니폼(조명, 카메라 위치)을 설정합니다.
+*   `getScene()`에 있는 모든 `Object` 인스턴스의 `Draw()` 함수를 호출하여 객체를 그립니다. `Object::Draw`는 `glUseProgram`을 호출하지 않고, `programID`가 활성화된 상태에서 객체별 유니폼(월드 행렬, 재질 등)을 설정하고 그립니다.
+*   `g_spline`이 존재하면 스플라인을 그립니다. `Spline::Draw`는 자체적으로 셰이더를 활성화하고 유니폼을 설정합니다.
+*   더블 버퍼링을 위해 `glutSwapBuffers()`를 호출합니다.
+
+**2.5. 초기화 함수 (`init`)**
+
+```cpp
+void init()
+{
+    GLenum res = glewInit(); // GLEW 초기화
+	
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // 배경색 흰색으로 설정
+	glEnable(GL_DEPTH_TEST); // 깊이 테스트 활성화
+
+    // 객체 셰이더 로드 (지오메트리 셰이더 없음)
+	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt");
+
+    // 카메라 투영 및 뷰 행렬 설정
+    projection = glm::perspective(glm::radians(45.0f), (float)g_windowWidth / (float)g_windowHeight, 0.1f, 1000.0f);
+    view = glm::lookAt(
+        glm::vec3(0, 5, 15), // 카메라 위치
+        glm::vec3(0, 0, 0),  // 바라보는 지점
+        glm::vec3(0, 1, 0)   // 카메라 상향 벡터
+    );
+
+	// 돼지 저금통 로드 및 씬에 추가
+	objl::Loader piggyLoader;
+	if (piggyLoader.LoadFile("PiggyBank.obj"))
+	{
+		for (int i = 0; i < piggyLoader.LoadedMeshes.size(); i++)
+		{
+			objl::Mesh curMesh = piggyLoader.LoadedMeshes[i];
+			Object* geometryObject = new Object(programID);
+			geometryObject->InitFromMesh(curMesh);
+			geometryObject->SetPosition(glm::vec3(0.0f, 2.0f, 0.0f));
+			getScene().push_back(geometryObject);
+		}
+	}
+
+	// 큐브 로드 및 씬에 추가 (하나의 큐브만 로드)
+	objl::Loader cubeLoader;
+	if (cubeLoader.LoadFile("cube.obj"))
+	{
+		if (!cubeLoader.LoadedMeshes.empty())
+		{
+			objl::Mesh curMesh = cubeLoader.LoadedMeshes[0]; // 첫 번째 메쉬만 사용
+			Object* geometryObject1 = new Object(programID);
+			geometryObject1->InitFromMesh(curMesh);
+			geometryObject1->SetPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
+			getScene().push_back(geometryObject1);
+		}
+	}
+
+    // 스플라인 제어점 로드 및 스플라인 객체 생성
+	loadControlPoints("spline_control_points.txt");
+	if (!g_controlPoints.empty())
+	{
+		g_spline = new Spline(g_controlPoints);
+	}
+}
+```
+
+*   OpenGL 확장 기능 로더인 GLEW를 초기화합니다.
+*   배경색을 흰색으로 설정하고 깊이 테스트를 활성화합니다.
+*   객체 렌더링에 사용할 셰이더 프로그램(`programID`)을 로드합니다.
+*   카메라의 투영 및 뷰 행렬을 설정합니다.
+*   `OBJ_Loader`를 사용하여 "PiggyBank.obj"와 "cube.obj"를 로드하고, 각각 `Object` 인스턴스를 생성하여 `getScene()`에 추가합니다. 큐브는 이제 하나만 로드됩니다.
+*   스플라인 제어점을 로드하고 `Spline` 객체를 생성합니다.
+
+**2.6. 애니메이션 함수 (`Animate`)**
+
+```cpp
+void Animate(int value)
+{
+    // --- 스플라인 경로 계산 ---
+    if (g_spline != nullptr)
+    {
+        g_splineAnimT += 0.001f; // 스플라인 애니메이션 진행도 업데이트
+        if (g_splineAnimT > 1.0f)
+        {
+            g_splineAnimT = 0.0f; // 끝에 도달하면 처음으로 리셋
+        }
+
+        glm::vec3 newPos = g_spline->getPointOnSpline(g_splineAnimT); // 스플라인 위의 새 위치 계산
+
+        // 계산된 스플라인 위치를 큐브(getScene()[1])에 적용
+        if (getScene().size() > 1)
+        {
+            // 현재 모든 객체(큐브)가 스플라인을 따라 이동하도록 되어 있습니다.
+            // getScene()[0]은 돼지, getScene()[1]은 큐브입니다.
+            // 이 루프는 getScene()[1] (큐브)에만 적용됩니다.
+            for (int i = 1; i < getScene().size(); i++)
+            {
+                getScene()[i]->SetPosition(newPos);
+            }
+        }
+    }
+
+    // --- 개별 객체 애니메이션 ---
+    // 돼지(getScene()[0])는 제자리에서 회전
+    if (getScene().size() > 0)
+    {
+        getScene()[0]->AnimateRotate();
+    }
+
+    // 큐브(getScene()[1])도 제자리에서 회전
+    // 현재 코드는 큐브가 스플라인을 따라 이동하면서 동시에 회전하도록 되어 있습니다.
+    for (int i = 1; i < getScene().size(); i++) 
+    {
+        getScene()[i]->AnimateRotate();
+    }
+    glutTimerFunc(10, Animate, 1); // 10ms 후 Animate 함수 재호출
+    glutPostRedisplay(); // 화면 갱신 요청
+}
+```
+
+*   `g_splineAnimT`를 업데이트하여 스플라인 애니메이션 진행도를 조절합니다.
+*   `g_spline->getPointOnSpline()`을 호출하여 스플라인 위의 새 위치를 계산합니다.
+*   `getScene()`의 인덱스 1부터 모든 객체(현재는 큐브)에 이 새 위치를 적용합니다.
+*   돼지(`getScene()[0]`)는 제자리에서 회전합니다.
+*   큐브(`getScene()[1]`)도 제자리에서 회전합니다. (즉, 큐브는 스플라인을 따라 이동하면서 동시에 회전합니다.)
+*   `glutTimerFunc`와 `glutPostRedisplay`를 통해 애니메이션 루프를 계속 실행합니다.
+
+**2.7. 메인 함수 (`main`)**
+
+*   `freeglut`을 초기화하고 창을 생성합니다.
+*   `init()` 함수를 호출하여 모든 초기 설정을 수행합니다.
+*   `glutTimerFunc`와 `glutDisplayFunc`를 등록하여 애니메이션 및 렌더링 콜백을 설정합니다.
+*   `glutMainLoop()`를 시작하여 이벤트 루프에 진입합니다.
+*   프로그램 종료 시 `Spline` 객체와 `getScene()`의 모든 `Object` 객체를 해제합니다.
+
+**3. '겹치는 부분' 및 잠재적 문제점 검토**
+
+*   **`renderScene`의 `glUseProgram`**: `renderScene`에서 `programID`를 활성화하고 공통 유니폼을 설정한 후, `Object::Draw`는 `glUseProgram`을 호출하지 않습니다. `Spline::Draw`는 자체적으로 셰이더를 활성화합니다. 이 구조는 올바르며 '겹치는 부분'으로 인한 문제는 없을 것으로 보입니다.
+*   **`Animate` 함수의 로직**: 
+    *   현재 `Animate` 함수는 큐브(`getScene()[1]`)가 스플라인을 따라 이동하면서 동시에 제자리에서 회전하도록 되어 있습니다. 이는 의도된 동작이라면 문제가 없지만, 만약 큐브가 스플라인을 따라 이동만 하기를 원했다면 `getScene()[i]->AnimateRotate();` 부분은 제거해야 합니다.
+    *   **가장 큰 문제**: `Animate` 함수 내부에 `glutTimerFunc(10, Animate, 1);`와 `glutPostRedisplay();`가 있습니다. 이 두 줄은 `Animate` 함수가 끝나는 지점(닫는 중괄호 `}`) 바로 앞에 있어야 합니다.
+        *   **컴파일 오류 분석**: 사용자님께서 보내주신 컴파일 오류 메시지(`C2365`, `C2556`, `C2371`, `C2059`, `C2143`, `C2447`)는 이 두 줄이 `Animate` 함수 밖에서 선언되거나, `Animate` 함수가 예상보다 일찍 닫히는 구조적 문제를 강하게 시사합니다. 제가 읽은 코드에서는 이 두 줄이 `Animate` 함수 내부에 올바르게 위치해 있지만, 컴파일러는 다른 것을 보고 있는 것 같습니다. 이는 파일의 실제 내용과 제가 읽은 내용 사이에 미묘한 차이가 있거나, 눈에 보이지 않는 특수 문자 때문일 수 있습니다.
+
+**4. 컴파일 오류 해결 방안**
+
+현재 가장 시급한 문제는 `main.cpp`의 컴파일 오류입니다. 제가 읽은 코드와 컴파일러가 보는 코드 사이에 불일치가 있는 것으로 보입니다.
+
+**해결책:**
+
+`main.cpp` 파일 전체를 제가 분석한 내용과 일치하는 코드로 **다시 한번 덮어쓰는 것**이 가장 확실한 방법입니다. 이렇게 하면 파일 인코딩 문제나 숨겨진 특수 문자 등으로 인한 구조적 오류를 제거할 수 있습니다.

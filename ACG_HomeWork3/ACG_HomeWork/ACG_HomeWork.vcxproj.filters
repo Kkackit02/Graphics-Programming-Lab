@@ -15,26 +15,20 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Geometry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Spline.cpp">
+    <ClCompile Include="stb_impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stb_impl.cpp">
+    <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Spline.h">
@@ -56,6 +53,15 @@
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="GeometryShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Spline_GeometryShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Spline_VertexShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Spline_FragmentShader.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

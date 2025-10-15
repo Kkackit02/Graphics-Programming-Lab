@@ -1,0 +1,35 @@
+1. spline 쉐이더 작성 후 spline 먼저 그리기
+2. 별도의 obj를 만들기 위해 쉐이더 작성후 spline 좌표 위로 올리기(애니메이션 적용)\
+
+
+유니티 에서 영감을 받아
+Scene은 각  Object들을 가지고 있음.
+각 객체들을 쉽게 관리하기 위해서 Object라는 클래스를 선언
+Object는 Vbo, VBO와 같은 생성을 위한 정보뿐만 아니라, 위치 정보, 색상 ,크기정보등을 가지고 있음. 
+이에대한 구조는 상용 게임 개발 엔진 유니티에서 영향을 받아 개발
+
+
+Object 헤더에는 여러 메소드도 작성
+
+메소드에는 현재 포지션을 정하는 함수
+Mesh(Obj Loader 라이브러리에서 선언되어있는 obj data가 담긴 클래스 구조를 받아 정보 초기화)
+
+이후 포팅된 vertex, 등의 데이터를 통해 VBO, VAO를 채우고 Bind
+
+애니메이션을 위한 rotate, scale, translate, 그리기 위한 Draw 함수도 지원
+Draw에서는 texture를 bind하고  MVP를 거쳐 카메라 위치로 ㅍ현
+
+object에는 ProgramID(쉐이더)도 지정할 수 있어서 원하는 쉐이더 종류를 다르게 지정할 수도 있음
+
+
+
+씬 헤더는 단지 object들을 관리하는 목적,
+씬을 순회하며 각 객체를 초기화, draw, 애니메이션 컨트롤을 수행함
+
+stb_image는 오픈소스 라이브러리로 텍스처 이용에 사용
+
+
+점을 찍기 위해 점에 대한 PointShader
+ spline curve를 그리기 위해 splineShader
+객체들을 그리기 위해 Shader
+총 3종류를 작성

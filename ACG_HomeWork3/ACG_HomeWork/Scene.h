@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
 
-class Geometry;
+class Object;
 
-std::vector<Geometry*>& getScene();
+std::vector<Object*>& getScene();

@@ -1,8 +1,8 @@
 #include "Scene.h"
 #include <vector>
 
-std::vector<Geometry*>& getScene()
+std::vector<Object*>& getScene()
 {
-    static std::vector<Geometry*> g_Scene_instance;
+    static std::vector<Object*> g_Scene_instance;
     return g_Scene_instance;
 }

@@ -1,27 +1,22 @@
-uniform vec4 LightPostion;
+#version 330 core
+layout(location = 0) in vec3 inPos;
+layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec2 inTexCoord;
 
-const float SpecularContribution = 0.3;
-const float DiffuseContribution = 1.0 - SpecularContribution;
+uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 wMat;
 
-out float LightIntensity;
+out vec3 WorldPos;
+out vec3 Normal;
+out vec2 TexCoord;
 
-void main(void)
+void main()
 {
-	vec3 ecPosition = vec3 (gl_ModelViewMatrix * gl_Vertex);
-	vec3 tnorm = normalize(gl_NormalMatrix * gl_Normal);
-	vec3 lightVec = normalize(LightPostion.xyz - ecPosition);
-	vec3 reflectVec = reflect(-lightVec, tnorm);
-	vec3 viewVec = normalize(-ecPosition);
-	float diffuse = max(dot(lightVec, tnorm), 0.0);
-	float spec = 0.0;
-
-	if (diffuse > 0.0)
-	{
-			spec = max(dot(reflectVec, viewVec), 0.0);
-			spec = pow(spec, 16.0);
-	}
-	LightIntensity = DiffuseContribution * diffuse + SpecularContribution * spec;
-
-	gl_position = ftransform();
-
+    // Pass world-space position and normal to fragment shader
+    WorldPos = vec3(wMat * vec4(inPos, 1.0));
+    Normal = mat3(transpose(inverse(wMat))) * inNormal;
+    TexCoord = inTexCoord;
+    
+    gl_Position = projection * view * vec4(WorldPos, 1.0);
 }
