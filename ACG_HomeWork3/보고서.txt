@@ -1,35 +1,43 @@
-1. spline 쉐이더 작성 후 spline 먼저 그리기
-2. 별도의 obj를 만들기 위해 쉐이더 작성후 spline 좌표 위로 올리기(애니메이션 적용)\
 
+## 프로그래밍 과제 #1 보고서
 
-유니티 에서 영감을 받아
-Scene은 각  Object들을 가지고 있음.
-각 객체들을 쉽게 관리하기 위해서 Object라는 클래스를 선언
-Object는 Vbo, VBO와 같은 생성을 위한 정보뿐만 아니라, 위치 정보, 색상 ,크기정보등을 가지고 있음. 
-이에대한 구조는 상용 게임 개발 엔진 유니티에서 영향을 받아 개발
+### 1. 구현 방법
 
+본 과제는 OpenGL을 사용하여 3D 객체를 로드하고, 애니메이션하며, 스플라인 곡선을 구현하는 것을 목표로 합니다.
 
-Object 헤더에는 여러 메소드도 작성
+**1.1. 객체 로딩 및 렌더링:**
+   - `OBJ_Loader` 라이브러리를 활용하여 `.obj` 파일(예: PiggyBank.obj, cube.obj)을 로드합니다.
+   - `Object` 클래스는 로드된 메쉬 데이터를 관리하며, VAO(Vertex Array Object), VBO(Vertex Buffer Object)를 설정하고 텍스처(`stb_image` 라이브러리 사용)를 로드합니다.
+   - 객체는 Phong 쉐이딩 모델(Ka, Kd, Ks)과 텍스처 매핑을 지원하는 셰이더(`VertexShader.txt`, `FragmentShader.txt`)를 사용하여 렌더링됩니다.
+   - `Draw` 메서드에서 모델, 뷰, 투영 행렬을 설정하고, 재질 속성 및 텍스처를 셰이더에 전달하여 최종 렌더링을 수행합니다.
 
-메소드에는 현재 포지션을 정하는 함수
-Mesh(Obj Loader 라이브러리에서 선언되어있는 obj data가 담긴 클래스 구조를 받아 정보 초기화)
+**1.2. 객체 애니메이션:**
+   - `Object` 클래스는 개별 객체의 회전(`AnimateRotate`), 이동(`AnimateTranslate`), 크기 조절(`AnimateScale`) 애니메이션 기능을 제공합니다.
+   - `main.cpp`의 `Animate` 함수에서 이러한 애니메이션 메서드를 호출하여 객체를 움직입니다.
+   - 하나의 객체(초기 로드된 PiggyBank)는 자체적으로 회전 애니메이션을 수행합니다.
+   - 다른 객체(큐브)들은 스플라인 곡선을 따라 이동하는 애니메이션을 구현합니다.
 
-이후 포팅된 vertex, 등의 데이터를 통해 VBO, VAO를 채우고 Bind
+**1.3. 스플라인 곡선 구현:**
+   - `Spline` 클래스는 `spline_control_points.txt` 파일로부터 제어점을 로드합니다.
+   - Catmull-Rom 스플라인 보간법을 사용하여 곡선을 생성합니다.
+   - 스플라인 곡선은 지오메트리 셰이더(`Spline_GeometryShader.txt`)를 포함한 셰이더(`Spline_VertexShader.txt`, `Spline_FragmentShader.txt`)를 사용하여 렌더링됩니다.
+   - 제어점들은 별도의 셰이더(`Point_VertexShader.txt`, `Point_FragmentShader.txt`)를 사용하여 `GL_POINTS` 형태로 시각화됩니다.
 
-애니메이션을 위한 rotate, scale, translate, 그리기 위한 Draw 함수도 지원
-Draw에서는 texture를 bind하고  MVP를 거쳐 카메라 위치로 ㅍ현
+**1.4. 셰이더 관리:**
+   - 일반 객체 렌더링을 위한 `VertexShader.txt`, `FragmentShader.txt`와 스플라인 렌더링을 위한 `Spline_VertexShader.txt`, `Spline_FragmentShader.txt`, `Spline_GeometryShader.txt`, 그리고 제어점 렌더링을 위한 `Point_VertexShader.txt`, `Point_FragmentShader.txt` 등 여러 셰이더 파일을 사용합니다.
+   - `LoadShaders` 함수는 버텍스, 프래그먼트, 그리고 선택적으로 지오메트리 셰이더를 컴파일하고 링크하여 OpenGL 프로그램 객체를 생성합니다.
 
-object에는 ProgramID(쉐이더)도 지정할 수 있어서 원하는 쉐이더 종류를 다르게 지정할 수도 있음
+### 2. 구현 환경
 
+*   **운영체제 (OS):** Windows 10
+*   **컴파일러:** Visual Studio (MSVC)
+*   **추가 라이브러리:**
+    *   `freeglut`: 창 관리 및 이벤트 처리
+    *   `glew`: OpenGL 확장 기능 관리
+    *   `glm`: 벡터 및 행렬 연산
+    *   `OBJ_Loader`: `.obj` 파일 로딩 (오픈 소스)
+    *   `stb_image`: 이미지 파일 로딩 (오픈 소스)
 
+### 3. 스크린샷
 
-씬 헤더는 단지 object들을 관리하는 목적,
-씬을 순회하며 각 객체를 초기화, draw, 애니메이션 컨트롤을 수행함
-
-stb_image는 오픈소스 라이브러리로 텍스처 이용에 사용
-
-
-점을 찍기 위해 점에 대한 PointShader
- spline curve를 그리기 위해 splineShader
-객체들을 그리기 위해 Shader
-총 3종류를 작성
+[여기에 스크린샷을 삽입하세요. 여러 장의 스크린샷을 추가하거나, 애니메이션이 포함된 경우 비디오 링크를 추가할 수 있습니다.]
