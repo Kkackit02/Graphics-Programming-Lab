@@ -16,7 +16,8 @@
 #include <gtc/type_ptr.hpp>
 
 #include "OBJ_Loader.h" // openSource
-#include "Object.h"
+
+#include "Object.h" 
 #include "Scene.h"
 #include "Spline.h"
 
@@ -25,8 +26,8 @@ using namespace std;
 int g_windowWidth, g_windowHeight;
 GLuint programID;
 glm::mat4 projection, view;
-std::vector<glm::vec3> g_controlPoints;
-Spline* g_spline = nullptr;
+std::vector<glm::vec3> controlPoints;
+Spline* g_spline = nullptr; 
 float g_splineAnimT = 0.0f;
 
 GLuint LoadShadersSub(GLuint shader_type, const char* file_path)
@@ -67,7 +68,7 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path,
     GLuint VertexShaderID = LoadShadersSub(GL_VERTEX_SHADER, vertex_file_path);
     GLuint FragmentShaderID = LoadShadersSub(GL_FRAGMENT_SHADER, fragment_file_path);
     GLuint GeometryShaderID = 0;
-    if (geometry_file_path != NULL) // Check if geometry shader path is provided
+    if (geometry_file_path != NULL) //pig, cube에는 사용을 안하므로..
     {
         GeometryShaderID = LoadShadersSub(GL_GEOMETRY_SHADER, geometry_file_path);
     }
@@ -75,7 +76,7 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path,
     GLuint ProgramID = glCreateProgram();
     glAttachShader(ProgramID, VertexShaderID);
     glAttachShader(ProgramID, FragmentShaderID);
-    if (GeometryShaderID != 0) // Attach geometry shader only if it was loaded
+    if (GeometryShaderID != 0) 
     {
         glAttachShader(ProgramID, GeometryShaderID);
     }
@@ -99,7 +100,7 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path,
 
 void loadControlPoints(const char* filepath)
 {
-    g_controlPoints.clear();
+    controlPoints.clear();
     ifstream fileStream(filepath, ios::in);
     if (fileStream.is_open())
     {
@@ -109,10 +110,10 @@ void loadControlPoints(const char* filepath)
             glm::vec3 point;
             stringstream ss(line);
             ss >> point.x >> point.y >> point.z;
-            g_controlPoints.push_back(point);
+            controlPoints.push_back(point);
         }
         fileStream.close();
-        printf("Loaded %d control points from %s.\n", (int)g_controlPoints.size(), filepath);
+        printf("Loaded %d control points from %s.\n", (int)controlPoints.size(), filepath);
     }
     else
     {
@@ -125,7 +126,7 @@ void renderScene(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(programID);
-    glUniform3f(glGetUniformLocation(programID, "LightPos"), 0.0f, 5.0f, 15.0f);
+    glUniform3f(glGetUniformLocation(programID, "LightPos"), 0.0f, 15.0f, 5.0f);
     glUniform3f(glGetUniformLocation(programID, "viewPos"), 0.0f, 5.0f, 15.0f);
 
     for (int idx = 0; idx < getScene().size(); idx++)
@@ -149,27 +150,22 @@ void init()
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
-    // Load object shaders (without geometry shader)
-	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt");
+	programID = LoadShaders("VertexShader.txt", "FragmentShader.txt"); // 객체 쉐이더 load
 
     projection = glm::perspective(glm::radians(45.0f), (float)g_windowWidth / (float)g_windowHeight, 0.1f, 1000.0f);
-    view = glm::lookAt(
-        glm::vec3(0, 5, 15),
-        glm::vec3(0, 0, 0),
-        glm::vec3(0, 1, 0)
-    );
+    view = glm::lookAt(glm::vec3(0, 5, 15),glm::vec3(0, 0, 0),glm::vec3(0, 1, 0));
 
 	// Load Piggy
-	objl::Loader piggyLoader;
+	objl::Loader piggyLoader; 
 	if (piggyLoader.LoadFile("PiggyBank.obj"))
 	{
 		for (int i = 0; i < piggyLoader.LoadedMeshes.size(); i++)
 		{
 			objl::Mesh curMesh = piggyLoader.LoadedMeshes[i];
-			Object* geometryObject = new Object(programID);
-			geometryObject->InitFromMesh(curMesh);
-			geometryObject->SetPosition(glm::vec3(0.0f, 2.0f, 0.0f));
-			getScene().push_back(geometryObject);
+			Object* PigObject = new Object(programID);
+            PigObject->InitFromMesh(curMesh);
+            PigObject->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+			getScene().push_back(PigObject);
 		}
 	}
 	// Load Cubes
@@ -179,19 +175,30 @@ void init()
 		for (int i = 0; i < cubeLoader.LoadedMeshes.size(); i++)
 		{
 			objl::Mesh curMesh = cubeLoader.LoadedMeshes[i];
-			Object* geometryObject1 = new Object(programID);
-			geometryObject1->InitFromMesh(curMesh);
-			geometryObject1->SetPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
-			getScene().push_back(geometryObject1);
+			Object* CubeObject1 = new Object(programID);
+            CubeObject1->InitFromMesh(curMesh);
+            CubeObject1->SetPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
+
+            Object* CubeObject2 = new Object(programID);
+            CubeObject2->InitFromMesh(curMesh);
+            CubeObject2->SetPosition(glm::vec3(-2.0f, -4.0f, -5.0f));
+
+            Object* CubeObject3 = new Object(programID);
+            CubeObject3->InitFromMesh(curMesh);
+            CubeObject3->SetPosition(glm::vec3(2.0f, 1.0f, -15.0f));
+
+
+            getScene().push_back(CubeObject1);
+            getScene().push_back(CubeObject2);
+            getScene().push_back(CubeObject3);
 
 		}
 	}
 
-    // Load control points and create spline
-	loadControlPoints("spline_control_points.txt");
-	if (!g_controlPoints.empty())
+	loadControlPoints("spline_control_points.txt"); //controlPoint 불러오기
+	if (!controlPoints.empty())
 	{
-		g_spline = new Spline(g_controlPoints);
+		g_spline = new Spline(controlPoints);
 	}
 }
 
@@ -202,7 +209,7 @@ void Animate(int value)
         g_splineAnimT += 0.001f; // 속도 조절
         if (g_splineAnimT > 1.0f)
         {
-            g_splineAnimT = 0.0f;
+            g_splineAnimT = 0.0f; //loop 될 수 있도록 수정
         }
 
 
@@ -210,24 +217,20 @@ void Animate(int value)
         // 계산된 Spline Curve대로 움직이도록 애니메이션 적용
         if (getScene().size() > 1)
         {
-            for (int i = 1; i < getScene().size(); i++)
-            {
-                getScene()[i]->SetPosition(newPos);
-
-            }
+            getScene()[1]->SetPosition(newPos);
+            getScene()[4]->SetPosition(newPos);
             
         }
     }
 
     if (getScene().size() > 0)
     {
-        getScene()[0]->AnimateRotate();
+        for (int i = 0; i < getScene().size(); i++)
+        {
+            getScene()[i]->AnimateRotate_L(); //모든 Object 회전시키기
+        }
     }
-
-    for (int i = 1; i < getScene().size(); i++) 
-    {
-        getScene()[i]->AnimateRotate();
-    }
+   
     glutTimerFunc(10, Animate, 1);
     glutPostRedisplay();
 }
@@ -241,7 +244,6 @@ int main(int argc, char** argv)
     g_windowHeight = 480;
     glutInitWindowSize(g_windowWidth, g_windowHeight);
     glutCreateWindow("Assignment#1 202112346");
-
     init();
 
     glutTimerFunc(10, Animate, 1);

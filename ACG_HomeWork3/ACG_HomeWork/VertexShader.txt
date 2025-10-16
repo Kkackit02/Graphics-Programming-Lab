@@ -13,7 +13,6 @@ out vec2 TexCoord;
 
 void main()
 {
-    // Pass world-space position and normal to fragment shader
     WorldPos = vec3(wMat * vec4(inPos, 1.0));
     Normal = mat3(transpose(inverse(wMat))) * inNormal;
     TexCoord = inTexCoord;

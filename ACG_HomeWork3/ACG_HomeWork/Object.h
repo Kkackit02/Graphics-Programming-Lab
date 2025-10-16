@@ -150,7 +150,7 @@ public:
         glBindVertexArray(0);
     }
 
-    void AnimateRotate()
+    void AnimateRotate_L()
     {
         m_Y_RotationAngle -= 0.01f;
     }
@@ -164,18 +164,6 @@ public:
         else {
             m_TranslateY -= 0.05f;
             if (m_TranslateY < -1.0f) m_TranslateDir = 1;
-        }
-    }
-
-    void AnimateScale()
-    {
-        if (m_ScaleDir == 1) {
-            m_Scale += 0.01f;
-            if (m_Scale > 1.5f) m_ScaleDir = -1;
-        }
-        else {
-            m_Scale -= 0.01f;
-            if (m_Scale < 0.5f) m_ScaleDir = 1;
         }
     }
 };

@@ -1,15 +1,26 @@
 
 ## 프로그래밍 과제 #1 보고서
 
-### 1. 구현 방법
+1. 구현 방법
+3D 객체인 PiggyBank와 Cube를 로드하고, Hermite로 구현된 Spline Curve를 txt 형태로 3차원의 control Point를 입력받아 화면에 출력하도록 하였습니다.
+spline curve의 경로 좌표를 따라 Cube가 따라 움직일 수 있도록 하였습니다.
 
-본 과제는 OpenGL을 사용하여 3D 객체를 로드하고, 애니메이션하며, 스플라인 곡선을 구현하는 것을 목표로 합니다.
+1) opensource "OBJ_Loader" 라이브러리를 활용하여 `.obj` 파일(예: PiggyBank.obj, cube.obj)을 로드합니다. #https://github.com/Bly7/OBJ-Loader
+2) 다양한 객체들의 데이터를 관리하고 화면에 그리기 편리하게 하기 위해서 'Object' 클래스를 구현하였습니다. 'Object' 클래스는 Loader를 통해 로드된 메쉬 데이터를 관리합니다.
+객체를 관리하기 위해서 여러 메소드를 정의하였는데
+InitFromMesh() 함수를 통해 VAO , VBO, Texture 파일을 로드합니다. 텍스처는 opensource 'stb_image' 라이브러리를 사용하였습니다.
+이러한 초기화 함수외에도 화면에 출력하는 기능과 animation을 위한 rotate 함수, spline 곡선을 따라 움직이도록 하기 위해서 좌표값으로 객체의 position을 변경하는 함수를 구현하였습니다.
 
-**1.1. 객체 로딩 및 렌더링:**
-   - `OBJ_Loader` 라이브러리를 활용하여 `.obj` 파일(예: PiggyBank.obj, cube.obj)을 로드합니다.
-   - `Object` 클래스는 로드된 메쉬 데이터를 관리하며, VAO(Vertex Array Object), VBO(Vertex Buffer Object)를 설정하고 텍스처(`stb_image` 라이브러리 사용)를 로드합니다.
-   - 객체는 Phong 쉐이딩 모델(Ka, Kd, Ks)과 텍스처 매핑을 지원하는 셰이더(`VertexShader.txt`, `FragmentShader.txt`)를 사용하여 렌더링됩니다.
-   - `Draw` 메서드에서 모델, 뷰, 투영 행렬을 설정하고, 재질 속성 및 텍스처를 셰이더에 전달하여 최종 렌더링을 수행합니다.
+
+쉐이더는 크게 3 종류로 구현하였습니다.
+객체를 위한 VertexShader.txt, FragmentShader.txt 
+Hermite 스플라인을 위한 Spline_VertexShader.txt, Spline_FragmentShader.txt, Spline_GeometryShader.txt, 
+Control Point을 위한 Point_VertexShader.txt, Point_FragmentShader.txt 
+
+객체는 위한 쉐이더는 그동안 많이 사용해온 Phong Shading을 지원하고 texture 파일이 있다면 base color로 texture의 색상값을 반영하도록 구현하였습니다.
+Hermite를 위한 쉐이더는 기본적으로 txt에서 받은 control point 좌표를 받아 geometry shader로 넘기며, geometry shader에서 각 controlpoint 사이의 간격을 100으로 지정해 선분을 이으며, 선분의 좌표는 강의자료에 있는 Hermite 자료를 참고하여 작성하였습니다.
+
+
 
 **1.2. 객체 애니메이션:**
    - `Object` 클래스는 개별 객체의 회전(`AnimateRotate`), 이동(`AnimateTranslate`), 크기 조절(`AnimateScale`) 애니메이션 기능을 제공합니다.
@@ -24,7 +35,7 @@
    - 제어점들은 별도의 셰이더(`Point_VertexShader.txt`, `Point_FragmentShader.txt`)를 사용하여 `GL_POINTS` 형태로 시각화됩니다.
 
 **1.4. 셰이더 관리:**
-   - 일반 객체 렌더링을 위한 `VertexShader.txt`, `FragmentShader.txt`와 스플라인 렌더링을 위한 `Spline_VertexShader.txt`, `Spline_FragmentShader.txt`, `Spline_GeometryShader.txt`, 그리고 제어점 렌더링을 위한 `Point_VertexShader.txt`, `Point_FragmentShader.txt` 등 여러 셰이더 파일을 사용합니다.
+   
    - `LoadShaders` 함수는 버텍스, 프래그먼트, 그리고 선택적으로 지오메트리 셰이더를 컴파일하고 링크하여 OpenGL 프로그램 객체를 생성합니다.
 
 ### 2. 구현 환경

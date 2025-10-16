@@ -14,10 +14,12 @@ class Spline
 public:
     Spline(const std::vector<glm::vec3>& controlPoints)
     {
-        m_spline_programID = LoadSplineShaders("Spline_VertexShader.txt", "Spline_FragmentShader.txt", "Spline_GeometryShader.txt");
-        m_controlPoints = controlPoints;
-
-        m_paddedPoints = controlPoints;
+        m_spline_programID = LoadSplineShaders
+        ("Spline_VertexShader.txt", 
+            "Spline_FragmentShader.txt", 
+            "Spline_GeometryShader.txt");
+        m_controlPoints = controlPoints; // 점 
+        m_paddedPoints = controlPoints; // 선 
         if (m_paddedPoints.size() > 1)
         {
             m_paddedPoints.insert(m_paddedPoints.begin(), m_paddedPoints.front());
@@ -56,7 +58,7 @@ public:
         glDeleteBuffers(1, &m_points_vboID);
     }
 
-    glm::vec3 getPointOnSpline(float t)
+    glm::vec3 getPointOnSpline(float t) //spline의 좌표 반환 함수(애니메이션용)
     {
         if (m_controlPoints.size() < 2) return glm::vec3(0.0f);
         float numSegments = static_cast<float>(m_controlPoints.size() - 1);
@@ -73,7 +75,7 @@ public:
         return 0.5f * ( (2.0f * p1) + (-p0 + p2) * local_t + (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * lt2 + (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * lt3 );
     }
 
-    void Draw(const glm::mat4& view, const glm::mat4& projection)
+    void Draw(const glm::mat4& view, const glm::mat4& projection) 
     {
         if (m_controlPoints.size() < 2) return;
 

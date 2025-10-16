@@ -3,6 +3,6 @@
 
 std::vector<Object*>& getScene()
 {
-    static std::vector<Object*> g_Scene_instance;
-    return g_Scene_instance;
+    static std::vector<Object*> Scene_instance;
+    return Scene_instance;
 }

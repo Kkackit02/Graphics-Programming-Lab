@@ -52,9 +52,6 @@
     <Text Include="FragmentShader.txt">
       <Filter>Source Files</Filter>
     </Text>
-    <Text Include="GeometryShader.txt">
-      <Filter>Source Files</Filter>
-    </Text>
     <Text Include="Spline_GeometryShader.txt">
       <Filter>Source Files</Filter>
     </Text>
@@ -62,6 +59,12 @@
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="Spline_FragmentShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Point_FragmentShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="Point_VertexShader.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
