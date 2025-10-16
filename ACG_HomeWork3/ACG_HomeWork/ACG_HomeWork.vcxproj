@@ -35,6 +35,7 @@
     <Text Include="FragmentShader.txt" />
     <Text Include="Point_FragmentShader.txt" />
     <Text Include="Point_VertexShader.txt" />
+    <Text Include="spline_control_points.txt" />
     <Text Include="Spline_FragmentShader.txt" />
     <Text Include="Spline_GeometryShader.txt" />
     <Text Include="Spline_VertexShader.txt" />

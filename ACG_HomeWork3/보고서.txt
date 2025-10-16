@@ -5,10 +5,10 @@
 3D 객체인 PiggyBank와 Cube를 로드하고, Hermite로 구현된 Spline Curve를 txt 형태로 3차원의 control Point를 입력받아 화면에 출력하도록 하였습니다.
 spline curve의 경로 좌표를 따라 Cube가 따라 움직일 수 있도록 하였습니다.
 
-1) opensource "OBJ_Loader" 라이브러리를 활용하여 `.obj` 파일(예: PiggyBank.obj, cube.obj)을 로드합니다. #https://github.com/Bly7/OBJ-Loader
+1)OBJ_Loader 라이브러리를 활용하여 `.obj` 파일(예: PiggyBank.obj, cube.obj)을 로드합니다. 
 2) 다양한 객체들의 데이터를 관리하고 화면에 그리기 편리하게 하기 위해서 'Object' 클래스를 구현하였습니다. 'Object' 클래스는 Loader를 통해 로드된 메쉬 데이터를 관리합니다.
 객체를 관리하기 위해서 여러 메소드를 정의하였는데
-InitFromMesh() 함수를 통해 VAO , VBO, Texture 파일을 로드합니다. 텍스처는 opensource 'stb_image' 라이브러리를 사용하였습니다.
+InitFromMesh() 함수를 통해 VAO , VBO, Texture 파일을 로드합니다. 텍스처는 stb_image 라이브러리를 사용하였습니다.
 이러한 초기화 함수외에도 화면에 출력하는 기능과 animation을 위한 rotate 함수, spline 곡선을 따라 움직이도록 하기 위해서 좌표값으로 객체의 position을 변경하는 함수를 구현하였습니다.
 
 
@@ -21,33 +21,14 @@ Control Point을 위한 Point_VertexShader.txt, Point_FragmentShader.txt
 Hermite를 위한 쉐이더는 기본적으로 txt에서 받은 control point 좌표를 받아 geometry shader로 넘기며, geometry shader에서 각 controlpoint 사이의 간격을 100으로 지정해 선분을 이으며, 선분의 좌표는 강의자료에 있는 Hermite 자료를 참고하여 작성하였습니다.
 
 
+2. 구현 환경
+운영체제 : Window 11
+컴파일러 : Visual Studio 2022 
+- 사용된 opengGL라이브러리 freeglut , glew, glm
+- 사용된 openSource 라이브러리 : OBJ_Loader(#https://github.com/Bly7/OBJ-Loader), stb_image(https://github.com/nothings/stb)
 
-**1.2. 객체 애니메이션:**
-   - `Object` 클래스는 개별 객체의 회전(`AnimateRotate`), 이동(`AnimateTranslate`), 크기 조절(`AnimateScale`) 애니메이션 기능을 제공합니다.
-   - `main.cpp`의 `Animate` 함수에서 이러한 애니메이션 메서드를 호출하여 객체를 움직입니다.
-   - 하나의 객체(초기 로드된 PiggyBank)는 자체적으로 회전 애니메이션을 수행합니다.
-   - 다른 객체(큐브)들은 스플라인 곡선을 따라 이동하는 애니메이션을 구현합니다.
 
-**1.3. 스플라인 곡선 구현:**
-   - `Spline` 클래스는 `spline_control_points.txt` 파일로부터 제어점을 로드합니다.
-   - Catmull-Rom 스플라인 보간법을 사용하여 곡선을 생성합니다.
-   - 스플라인 곡선은 지오메트리 셰이더(`Spline_GeometryShader.txt`)를 포함한 셰이더(`Spline_VertexShader.txt`, `Spline_FragmentShader.txt`)를 사용하여 렌더링됩니다.
-   - 제어점들은 별도의 셰이더(`Point_VertexShader.txt`, `Point_FragmentShader.txt`)를 사용하여 `GL_POINTS` 형태로 시각화됩니다.
 
-**1.4. 셰이더 관리:**
-   
-   - `LoadShaders` 함수는 버텍스, 프래그먼트, 그리고 선택적으로 지오메트리 셰이더를 컴파일하고 링크하여 OpenGL 프로그램 객체를 생성합니다.
-
-### 2. 구현 환경
-
-*   **운영체제 (OS):** Windows 10
-*   **컴파일러:** Visual Studio (MSVC)
-*   **추가 라이브러리:**
-    *   `freeglut`: 창 관리 및 이벤트 처리
-    *   `glew`: OpenGL 확장 기능 관리
-    *   `glm`: 벡터 및 행렬 연산
-    *   `OBJ_Loader`: `.obj` 파일 로딩 (오픈 소스)
-    *   `stb_image`: 이미지 파일 로딩 (오픈 소스)
 
 ### 3. 스크린샷
 

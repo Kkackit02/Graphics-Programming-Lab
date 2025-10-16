@@ -67,5 +67,8 @@
     <Text Include="Point_VertexShader.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="spline_control_points.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
