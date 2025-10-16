@@ -15,7 +15,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-#include "OBJ_Loader.h" // openSource
+#include "OBJ_Loader.h" //openSource
 
 #include "Object.h" 
 #include "Scene.h"

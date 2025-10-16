@@ -7,6 +7,14 @@
       "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Object.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\spline_control_points.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\spline_control_points.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -39,16 +47,8 @@
       "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Spline_FragmentShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Scene.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Scene.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|solutionrelative:ACG_HomeWork\\Object.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EE6A8A1-12AB-427E-ABAD-10C600DA30E5}|ACG_HomeWork\\ACG_HomeWork.vcxproj|D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\FragmentShader.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -108,23 +108,10 @@
               "RelativeDocumentMoniker": "ACG_HomeWork\\main.cpp",
               "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\main.cpp",
               "RelativeToolTip": "ACG_HomeWork\\main.cpp",
-              "ViewState": "AgIAALQAAAAAAAAAAAAAALMAAAA3AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-10-02T01:59:04.994Z",
               "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "spline_control_points.txt",
-              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\spline_control_points.txt",
-              "RelativeDocumentMoniker": "ACG_HomeWork\\spline_control_points.txt",
-              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\spline_control_points.txt",
-              "RelativeToolTip": "ACG_HomeWork\\spline_control_points.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-16T07:57:00.32Z",
               "EditorCaption": ""
             },
             {
@@ -133,7 +120,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "VertexShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\VertexShader.txt",
               "RelativeDocumentMoniker": "ACG_HomeWork\\VertexShader.txt",
@@ -141,12 +128,11 @@
               "RelativeToolTip": "ACG_HomeWork\\VertexShader.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-15T07:17:01.497Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T07:17:01.497Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "Spline_FragmentShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Spline_FragmentShader.txt",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Spline_FragmentShader.txt",
@@ -158,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Spline_VertexShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Spline_VertexShader.txt",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Spline_VertexShader.txt",
@@ -170,7 +156,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Point_FragmentShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Point_FragmentShader.txt",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Point_FragmentShader.txt",
@@ -178,12 +164,11 @@
               "RelativeToolTip": "ACG_HomeWork\\Point_FragmentShader.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-16T07:03:33.884Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-16T07:03:33.884Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Point_VertexShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Point_VertexShader.txt",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Point_VertexShader.txt",
@@ -191,24 +176,47 @@
               "RelativeToolTip": "ACG_HomeWork\\Point_VertexShader.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-10-16T07:03:50.834Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-16T07:03:50.834Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 1,
               "Title": "Object.h",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.h",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Object.h",
               "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.h",
               "RelativeToolTip": "ACG_HomeWork\\Object.h",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAACsAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAAAIgAAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-10-15T14:47:38.21Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 2,
+              "Title": "Object.cpp",
+              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.cpp",
+              "RelativeDocumentMoniker": "ACG_HomeWork\\Object.cpp",
+              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.cpp",
+              "RelativeToolTip": "ACG_HomeWork\\Object.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-15T14:47:38.382Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "spline_control_points.txt",
+              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\spline_control_points.txt",
+              "RelativeDocumentMoniker": "ACG_HomeWork\\spline_control_points.txt",
+              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\spline_control_points.txt",
+              "RelativeToolTip": "ACG_HomeWork\\spline_control_points.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-10-16T07:57:00.32Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "Scene.h",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Scene.h",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Scene.h",
@@ -220,7 +228,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Spline.h",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Spline.h",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Spline.h",
@@ -228,12 +236,11 @@
               "RelativeToolTip": "ACG_HomeWork\\Spline.h",
               "ViewState": "AgIAAE4AAAAAAAAAAAAAADwAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-15T16:18:27.317Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T16:18:27.317Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "Spline_GeometryShader.txt",
               "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Spline_GeometryShader.txt",
               "RelativeDocumentMoniker": "ACG_HomeWork\\Spline_GeometryShader.txt",
@@ -242,18 +249,6 @@
               "ViewState": "AgIAABsAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
               "WhenOpened": "2025-10-15T16:28:20.55Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Object.cpp",
-              "DocumentMoniker": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.cpp",
-              "RelativeDocumentMoniker": "ACG_HomeWork\\Object.cpp",
-              "ToolTip": "D:\\GitClone\\AdvanceComputerGraphic\\AdvanceCG\\ACG_HomeWork3\\ACG_HomeWork\\Object.cpp",
-              "RelativeToolTip": "ACG_HomeWork\\Object.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-15T14:47:38.382Z"
             },
             {
               "$type": "Document",

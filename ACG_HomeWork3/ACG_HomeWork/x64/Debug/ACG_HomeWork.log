@@ -1,1 +1,14 @@
-﻿  ACG_HomeWork.vcxproj -> D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork3\x64\Debug\ACG_HomeWork.exe
+﻿  Object.cpp
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork3\ACG_HomeWork\OBJ_Loader.h(949,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Object.cpp')
+  
+  main.cpp
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork3\ACG_HomeWork\main.cpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork3\ACG_HomeWork\OBJ_Loader.h(949,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork3\ACG_HomeWork\Spline.h(93,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'main.cpp')
+  
+  Generating Code...
+  ACG_HomeWork.vcxproj -> D:\GitClone\AdvanceComputerGraphic\AdvanceCG\ACG_HomeWork3\x64\Debug\ACG_HomeWork.exe
