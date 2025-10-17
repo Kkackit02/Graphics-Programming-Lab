@@ -78,7 +78,7 @@ public:
 
         if (!mesh.MeshMaterial.map_Kd.empty())
         {
-            stbi_set_flip_vertically_on_load(true); // stbi -> Open Source Library for Texture Loading
+            stbi_set_flip_vertically_on_load(true); 
             int width, height, nrChannels;
             unsigned char* data = stbi_load(mesh.MeshMaterial.map_Kd.c_str(), &width, &height, &nrChannels, 0);
             if (data)

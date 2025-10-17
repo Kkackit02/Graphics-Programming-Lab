@@ -13,6 +13,6 @@ void main()
     } else if (v_curveType == 2) {
         FragColor = vec4(0.0, 0.0, 1.0, 1.0); // Blue for B-Spline
     } else {
-        FragColor = vec4(1.0, 1.0, 0.0, 1.0); // Yellow for error/default
+        FragColor = vec4(1.0, 1.0, 0.0, 1.0); // Yellow
     }
 }

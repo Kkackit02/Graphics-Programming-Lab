@@ -129,17 +129,17 @@ void keyboard(unsigned char key, int x, int y)
     {
     case '1':
         g_spline->SetCurveType(Spline::HERMITE_CATMULL_ROM);
-        std::cout << "Curve type set to Hermite/Catmull-Rom" << std::endl;
+        std::cout << "Set Hermite/Catmull-Rom" << std::endl;
         break;
     case '2':
         g_spline->SetCurveType(Spline::BEZIER);
-        std::cout << "Curve type set to Bezier" << std::endl;
+        std::cout << "Set Bezier" << std::endl;
         break;
     case '3':
         g_spline->SetCurveType(Spline::B_SPLINE);
-        std::cout << "Curve type set to B-Spline" << std::endl;
+        std::cout << "Set B-Spline" << std::endl;
         break;
-    case 27: // ESC key
+    case 27: // ESC , EXIT
         glutLeaveMainLoop();
         break;
     }
@@ -238,7 +238,7 @@ void Animate(int value)
         if (getScene().size() > 1)
         {
             getScene()[1]->SetPosition(newPos);
-            getScene()[3]->SetPosition(newPos);
+            getScene()[3]->SetPosition(newPos); // 밝은 면 버그수정
             
         }
     }
