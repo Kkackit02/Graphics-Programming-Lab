@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <vector>
@@ -12,30 +11,45 @@
 class Spline
 {
 public:
+    enum CurveType {
+        HERMITE_CATMULL_ROM = 0,
+        BEZIER = 1,
+        B_SPLINE = 2
+    };
+
     Spline(const std::vector<glm::vec3>& controlPoints)
+        : m_currentCurveType(HERMITE_CATMULL_ROM)
     {
-        m_spline_programID = LoadSplineShaders
-        ("Spline_VertexShader.txt", 
-            "Spline_FragmentShader.txt", 
-            "Spline_GeometryShader.txt");
-        m_controlPoints = controlPoints; // ¡° 
-        m_paddedPoints = controlPoints; // º± 
-        if (m_paddedPoints.size() > 1)
-        {
+        m_spline_programID = LoadShaders("Spline_VertexShader.txt", "Spline_FragmentShader.txt", "Spline_GeometryShader.txt");
+        m_controlPoints = controlPoints;
+
+        // --- Setup for Hermite/Catmull-Rom ---
+        m_paddedPoints = controlPoints;
+        if (m_paddedPoints.size() > 1) {
             m_paddedPoints.insert(m_paddedPoints.begin(), m_paddedPoints.front());
             m_paddedPoints.push_back(m_paddedPoints.back());
         }
         m_numPaddedPoints = static_cast<int>(m_paddedPoints.size());
 
-        glGenVertexArrays(1, &m_spline_vaoID);
-        glBindVertexArray(m_spline_vaoID);
-        glGenBuffers(1, &m_spline_vboID);
-        glBindBuffer(GL_ARRAY_BUFFER, m_spline_vboID);
+        glGenVertexArrays(1, &m_hermite_vaoID);
+        glBindVertexArray(m_hermite_vaoID);
+        glGenBuffers(1, &m_hermite_vboID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_hermite_vboID);
         glBufferData(GL_ARRAY_BUFFER, m_paddedPoints.size() * sizeof(glm::vec3), m_paddedPoints.data(), GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
         glEnableVertexAttribArray(0);
-        
-        m_points_programID = LoadPointShaders("Point_VertexShader.txt", "Point_FragmentShader.txt");
+
+        // --- Setup for Bezier ---
+        glGenVertexArrays(1, &m_bezier_vaoID);
+        glBindVertexArray(m_bezier_vaoID);
+        glGenBuffers(1, &m_bezier_vboID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_bezier_vboID);
+        glBufferData(GL_ARRAY_BUFFER, m_controlPoints.size() * sizeof(glm::vec3), m_controlPoints.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        // --- Setup for drawing control points ---
+        m_points_programID = LoadShaders("Point_VertexShader.txt", "Point_FragmentShader.txt");
         glGenVertexArrays(1, &m_points_vaoID);
         glBindVertexArray(m_points_vaoID);
         glGenBuffers(1, &m_points_vboID);
@@ -50,41 +64,112 @@ public:
     ~Spline()
     {
         glDeleteProgram(m_spline_programID);
-        glDeleteVertexArrays(1, &m_spline_vaoID);
-        glDeleteBuffers(1, &m_spline_vboID);
+        glDeleteVertexArrays(1, &m_hermite_vaoID);
+        glDeleteBuffers(1, &m_hermite_vboID);
+        glDeleteVertexArrays(1, &m_bezier_vaoID);
+        glDeleteBuffers(1, &m_bezier_vboID);
 
         glDeleteProgram(m_points_programID);
         glDeleteVertexArrays(1, &m_points_vaoID);
         glDeleteBuffers(1, &m_points_vboID);
     }
 
-    glm::vec3 getPointOnSpline(float t) //spline¿« ¡¬«• π›»Ø «‘ºˆ(æ÷¥œ∏ﬁ¿Ãº«øÎ)
+    void SetCurveType(CurveType type)
     {
-        if (m_controlPoints.size() < 2) return glm::vec3(0.0f);
-        float numSegments = static_cast<float>(m_controlPoints.size() - 1);
-        float segment_t = t * numSegments;
-        int segment_index = static_cast<int>(floor(segment_t));
-        if (segment_index >= numSegments) segment_index = static_cast<int>(numSegments - 1);
-        float local_t = segment_t - segment_index;
-        glm::vec3 p0 = m_paddedPoints[segment_index];
-        glm::vec3 p1 = m_paddedPoints[segment_index + 1];
-        glm::vec3 p2 = m_paddedPoints[segment_index + 2];
-        glm::vec3 p3 = m_paddedPoints[segment_index + 3];
-        float lt2 = local_t * local_t;
-        float lt3 = lt2 * local_t;
-        return 0.5f * ( (2.0f * p1) + (-p0 + p2) * local_t + (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * lt2 + (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * lt3 );
+        m_currentCurveType = type;
+    }
+
+    glm::vec3 getPointOnSpline(float t) //splineÏùò Ï¢åÌëú Î∞òÌôò Ìï®Ïàò(Ïï†ÎãàÎ©îÏù¥ÏÖòÏö©)
+    {
+        if (m_controlPoints.size() < 4) {
+            if (m_controlPoints.size() < 2) return glm::vec3(0.0f);
+            // For less than 4 points, just do linear interpolation for safety
+            float numSegments = static_cast<float>(m_controlPoints.size() - 1);
+            float segment_t = t * numSegments;
+            int segment_index = static_cast<int>(floor(segment_t));
+            if (segment_index >= numSegments) segment_index = static_cast<int>(numSegments - 1);
+            float local_t = segment_t - segment_index;
+            return glm::mix(m_controlPoints[segment_index], m_controlPoints[segment_index + 1], local_t);
+        }
+
+        if (m_currentCurveType == BEZIER)
+        {
+            int numSegments = m_controlPoints.size() / 4;
+            if (numSegments == 0) return m_controlPoints[0];
+
+            float segment_t = t * numSegments;
+            int segment_index = static_cast<int>(floor(segment_t));
+            if (segment_index >= numSegments) segment_index = numSegments - 1;
+            float local_t = segment_t - segment_index;
+
+            int p_idx = segment_index * 4;
+            glm::vec3 p0 = m_controlPoints[p_idx];
+            glm::vec3 p1 = m_controlPoints[p_idx + 1];
+            glm::vec3 p2 = m_controlPoints[p_idx + 2];
+            glm::vec3 p3 = m_controlPoints[p_idx + 3];
+
+            float one_minus_t = 1.0f - local_t;
+            return pow(one_minus_t, 3.0f) * p0 +
+                   3.0f * local_t * pow(one_minus_t, 2.0f) * p1 +
+                   3.0f * pow(local_t, 2.0f) * one_minus_t * p2 +
+                   pow(local_t, 3.0f) * p3;
+        }
+        else // B-Spline and Hermite/Catmull-Rom use continuous logic
+        {
+            float numSegments = static_cast<float>(m_controlPoints.size() - 1);
+            float segment_t = t * numSegments;
+            int segment_index = static_cast<int>(floor(segment_t));
+            if (segment_index >= numSegments) segment_index = static_cast<int>(numSegments - 1);
+            float local_t = segment_t - segment_index;
+
+            glm::vec3 p0 = m_paddedPoints[segment_index];
+            glm::vec3 p1 = m_paddedPoints[segment_index + 1];
+            glm::vec3 p2 = m_paddedPoints[segment_index + 2];
+            glm::vec3 p3 = m_paddedPoints[segment_index + 3];
+
+            float lt2 = local_t * local_t;
+            float lt3 = lt2 * local_t;
+
+            if (m_currentCurveType == B_SPLINE)
+            {
+                float b0 = (1.0f/6.0f) * (-lt3 + 3.0f*lt2 - 3.0f*local_t + 1.0f);
+                float b1 = (1.0f/6.0f) * (3.0f*lt3 - 6.0f*lt2 + 4.0f);
+                float b2 = (1.0f/6.0f) * (-3.0f*lt3 + 3.0f*lt2 + 3.0f*local_t + 1.0f);
+                float b3 = (1.0f/6.0f) * (lt3);
+                return b0 * p0 + b1 * p1 + b2 * p2 + b3 * p3;
+            }
+            else // Default to HERMITE_CATMULL_ROM
+            {
+                return 0.5f * ( (2.0f * p1) + (-p0 + p2) * local_t + (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * lt2 + (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * lt3 );
+            }
+        }
     }
 
     void Draw(const glm::mat4& view, const glm::mat4& projection) 
     {
-        if (m_controlPoints.size() < 2) return;
-
+        // --- Draw the selected spline ---
         glUseProgram(m_spline_programID);
         glUniformMatrix4fv(glGetUniformLocation(m_spline_programID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(m_spline_programID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        glBindVertexArray(m_spline_vaoID);
-        glDrawArrays(GL_LINE_STRIP_ADJACENCY, 0, m_numPaddedPoints);
+        glUniform1i(glGetUniformLocation(m_spline_programID, "curveType"), static_cast<int>(m_currentCurveType));
 
+        if (m_currentCurveType == BEZIER)
+        {
+            if (m_controlPoints.size() >= 4) {
+                int num_bezier_points = (m_controlPoints.size() / 4) * 4;
+                glBindVertexArray(m_bezier_vaoID);
+                glDrawArrays(GL_LINES_ADJACENCY, 0, num_bezier_points);
+            }
+        }
+        else // Default to Hermite/Catmull-Rom or B-Spline
+        {
+            if (m_controlPoints.size() >= 2) {
+                glBindVertexArray(m_hermite_vaoID);
+                glDrawArrays(GL_LINE_STRIP_ADJACENCY, 0, m_numPaddedPoints);
+            }
+        }
+
+        // --- Draw the control points ---
         glUseProgram(m_points_programID);
         glUniformMatrix4fv(glGetUniformLocation(m_points_programID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(m_points_programID, "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -98,11 +183,19 @@ public:
 
 private:
     GLuint m_spline_programID;
-    GLuint m_spline_vaoID;
-    GLuint m_spline_vboID;
+    CurveType m_currentCurveType;
+
+    // Buffers for Hermite/Catmull-Rom
+    GLuint m_hermite_vaoID;
+    GLuint m_hermite_vboID;
     int m_numPaddedPoints;
     std::vector<glm::vec3> m_paddedPoints;
 
+    // Buffers for Bezier
+    GLuint m_bezier_vaoID;
+    GLuint m_bezier_vboID;
+
+    // Buffers for drawing control points
     GLuint m_points_programID;
     GLuint m_points_vaoID;
     GLuint m_points_vboID;

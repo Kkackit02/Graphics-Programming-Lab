@@ -121,6 +121,31 @@ void loadControlPoints(const char* filepath)
     }
 }
 
+void keyboard(unsigned char key, int x, int y)
+{
+    if (g_spline == nullptr) return;
+
+    switch (key)
+    {
+    case '1':
+        g_spline->SetCurveType(Spline::HERMITE_CATMULL_ROM);
+        std::cout << "Curve type set to Hermite/Catmull-Rom" << std::endl;
+        break;
+    case '2':
+        g_spline->SetCurveType(Spline::BEZIER);
+        std::cout << "Curve type set to Bezier" << std::endl;
+        break;
+    case '3':
+        g_spline->SetCurveType(Spline::B_SPLINE);
+        std::cout << "Curve type set to B-Spline" << std::endl;
+        break;
+    case 27: // ESC key
+        glutLeaveMainLoop();
+        break;
+    }
+    glutPostRedisplay();
+}
+
 void renderScene(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -164,7 +189,7 @@ void init()
 			objl::Mesh curMesh = piggyLoader.LoadedMeshes[i];
 			Object* PigObject = new Object(programID);
             PigObject->InitFromMesh(curMesh);
-            PigObject->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+            PigObject->SetPosition(glm::vec3(0.0f, -5.0f, 0.0f));
 			getScene().push_back(PigObject);
 		}
 	}
@@ -181,16 +206,11 @@ void init()
 
             Object* CubeObject2 = new Object(programID);
             CubeObject2->InitFromMesh(curMesh);
-            CubeObject2->SetPosition(glm::vec3(-2.0f, -4.0f, -5.0f));
-
-            Object* CubeObject3 = new Object(programID);
-            CubeObject3->InitFromMesh(curMesh);
-            CubeObject3->SetPosition(glm::vec3(2.0f, 1.0f, -15.0f));
+            CubeObject2->SetPosition(glm::vec3(5.0f, 1.0f, -15.0f));
 
 
             getScene().push_back(CubeObject1);
             getScene().push_back(CubeObject2);
-            getScene().push_back(CubeObject3);
 
 		}
 	}
@@ -218,7 +238,7 @@ void Animate(int value)
         if (getScene().size() > 1)
         {
             getScene()[1]->SetPosition(newPos);
-            getScene()[4]->SetPosition(newPos);
+            getScene()[3]->SetPosition(newPos);
             
         }
     }
@@ -248,6 +268,7 @@ int main(int argc, char** argv)
 
     glutTimerFunc(10, Animate, 1);
     glutDisplayFunc(renderScene);
+    glutKeyboardFunc(keyboard);
 
     glutMainLoop();
 

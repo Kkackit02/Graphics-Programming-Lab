@@ -1,8 +1,18 @@
 #version 330 core
 
+flat in int v_curveType;
+
 out vec4 FragColor;
 
 void main()
 {
-    FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color
+    if (v_curveType == 0) {
+        FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red for Hermite
+    } else if (v_curveType == 1) {
+        FragColor = vec4(0.0, 1.0, 0.0, 1.0); // Green for Bezier
+    } else if (v_curveType == 2) {
+        FragColor = vec4(0.0, 0.0, 1.0, 1.0); // Blue for B-Spline
+    } else {
+        FragColor = vec4(1.0, 1.0, 0.0, 1.0); // Yellow for error/default
+    }
 }

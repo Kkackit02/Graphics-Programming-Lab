@@ -5,28 +5,73 @@ layout(line_strip, max_vertices = 128) out;
 
 uniform mat4 projection;
 uniform mat4 view;
+uniform int curveType; // 0: Hermite/Catmull-Rom, 1: Bezier, 2: B-Spline
+
+flat out int v_curveType;
 
 void main()
 {
+    v_curveType = curveType;
+
     vec3 p0 = gl_in[0].gl_Position.xyz;
     vec3 p1 = gl_in[1].gl_Position.xyz;
     vec3 p2 = gl_in[2].gl_Position.xyz;
     vec3 p3 = gl_in[3].gl_Position.xyz;
 
-    int tes = 100;
-    for (int i = 0; i <= tes; i++) //tes을 100으로
+    int tes = 100; // Tessellation segments
+
+    if (curveType == 0) // Hermite (Catmull-Rom)
     {
-        float t = float(i) / tes; //간격을 100등분
-        float t2 = t * t;
-        float t3 = t2 * t;
+        for (int i = 0; i <= tes; i++)
+        {
+            float t = float(i) / tes;
+            float t2 = t * t;
+            float t3 = t2 * t;
 
-        vec3 point = 0.5 * ( (2.0 * p1) +
-                             (-p0 + p2) * t +
-                             (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t2 +
-                             (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3 );
+            vec3 point = 0.5 * ( (2.0 * p1) +
+                                 (-p0 + p2) * t +
+                                 (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t2 +
+                                 (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3 );
 
-        gl_Position = projection * view * vec4(point, 1.0);
-        EmitVertex();
+            gl_Position = projection * view * vec4(point, 1.0);
+            EmitVertex();
+        }
     }
+    else if (curveType == 1) // Bezier
+    {
+        for (int i = 0; i <= tes; i++)
+        {
+            float t = float(i) / tes;
+            float one_minus_t = 1.0 - t;
+            
+            vec3 point = pow(one_minus_t, 3.0) * p0 + 
+                         3.0 * t * pow(one_minus_t, 2.0) * p1 + 
+                         3.0 * pow(t, 2.0) * one_minus_t * p2 + 
+                         pow(t, 3.0) * p3;
+
+            gl_Position = projection * view * vec4(point, 1.0);
+            EmitVertex();
+        }
+    }
+    else if (curveType == 2) // B-Spline
+    {
+        for (int i = 0; i <= tes; i++)
+        {
+            float t = float(i) / tes;
+            float t2 = t * t;
+            float t3 = t2 * t;
+
+            float b0 = (1.0/6.0) * (-t3 + 3.0*t2 - 3.0*t + 1.0);
+            float b1 = (1.0/6.0) * (3.0*t3 - 6.0*t2 + 4.0);
+            float b2 = (1.0/6.0) * (-3.0*t3 + 3.0*t2 + 3.0*t + 1.0);
+            float b3 = (1.0/6.0) * (t3);
+
+            vec3 point = b0 * p0 + b1 * p1 + b2 * p2 + b3 * p3;
+
+            gl_Position = projection * view * vec4(point, 1.0);
+            EmitVertex();
+        }
+    }
+    
     EndPrimitive();
 }
