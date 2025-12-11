@@ -11,7 +11,7 @@
 
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <tiny_obj_loader.h>
+#include "tiny_obj_loader.h"
 
 #include <iostream>
 #include <fstream>
@@ -52,11 +52,11 @@ const bool enableValidationLayers = true;
 #endif
 
 struct Camera {
-    glm::vec3 position = glm::vec3(0.0f, 7.0f, 15.0f);
+    glm::vec3 position = glm::vec3(0.0f, 13.0f, 30.0f);
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     float yaw = -90.0f;
-    float pitch = 0.0f;
+    float pitch = -10.0f;
     float speed = 15.0f;
     float angularSpeed = 90.0f;
 };
@@ -257,11 +257,53 @@ private:
 
         if (action == GLFW_PRESS) {
             app->keys[key] = true;
-
+            if (key == GLFW_KEY_L) {
+                if (!app->lights.empty()) {
+                    app->lights[0].enabled = !app->lights[0].enabled;
+                }
+            }
         }
         else if (action == GLFW_RELEASE) {
             app->keys[key] = false;
         }
+    }
+
+    void processInput() {
+        float cameraSpeed = camera.speed * deltaTime;
+        if (keys[GLFW_KEY_W])
+            camera.position += cameraSpeed * camera.front;
+        if (keys[GLFW_KEY_S])
+            camera.position -= cameraSpeed * camera.front;
+        if (keys[GLFW_KEY_A])
+            camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+        if (keys[GLFW_KEY_D])
+            camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+        if (keys[GLFW_KEY_E])
+            camera.position += camera.up * cameraSpeed;
+        if (keys[GLFW_KEY_Q])
+            camera.position -= camera.up * cameraSpeed;
+
+        float cameraAngularSpeed = camera.angularSpeed * deltaTime;
+        if (keys[GLFW_KEY_LEFT])
+            camera.yaw -= cameraAngularSpeed;
+        if (keys[GLFW_KEY_RIGHT])
+            camera.yaw += cameraAngularSpeed;
+        if (keys[GLFW_KEY_UP])
+            camera.pitch += cameraAngularSpeed;
+        if (keys[GLFW_KEY_DOWN])
+            camera.pitch -= cameraAngularSpeed;
+
+        // constrain pitch
+        if (camera.pitch > 89.0f)
+            camera.pitch = 89.0f;
+        if (camera.pitch < -89.0f)
+            camera.pitch = -89.0f;
+
+        glm::vec3 direction;
+        direction.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+        direction.y = sin(glm::radians(camera.pitch));
+        direction.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+        camera.front = glm::normalize(direction);
     }
 
 
@@ -399,11 +441,34 @@ private:
     }
 
     void setupScene() {
+        objects.clear();
 
-        objects.push_back({ "models/PiggyBank.obj", glm::vec3(0.0f, 5.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.3f, 0.2f, 0.15f) });
+		// position(xyz) , rotation(xyz in degrees), scale(xyz), color(rgb)
+        // Floor
+        objects.push_back({ "models/Plane.obj", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 1.0f, 20.0f), glm::vec3(0.8f, 0.8f, 0.8f) });
+        objects.push_back({ "models/Plane.obj", glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 1.0f, 20.0f), glm::vec3(0.8f, 0.8f, 0.8f) });
+
+        // Walls
+        objects.push_back({ "models/Wall.obj", glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 10.0f, 1.0f), glm::vec3(0.7f, 0.7f, 0.7f) }); // Back
+        objects.push_back({ "models/Wall.obj", glm::vec3(-20.0f, 0.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(20.0f, 10.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f) }); // Left
+        objects.push_back({ "models/Wall.obj", glm::vec3(20.0f, 0.0f, 0.0f), glm::vec3(0.0f, -90.0f, 0.0f), glm::vec3(20.0f, 10.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }); // right
+
+        // Table
+        objects.push_back({ "models/table.obj", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.3f, 0.1f) });
+
+        // Chair
+        objects.push_back({ "models/chair.obj", glm::vec3(5.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.4f), glm::vec3(0.4f, 0.2f, 0.1f) });
+        objects.push_back({ "models/chair.obj", glm::vec3(5.0f, 0.0f, -3.0f), glm::vec3(0.0f, -90.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.4f), glm::vec3(0.4f, 0.2f, 0.1f) });
+        objects.push_back({ "models/chair.obj", glm::vec3(-5.0f, 0.0f, 3.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.4f), glm::vec3(0.4f, 0.2f, 0.1f) });
+        objects.push_back({ "models/chair.obj", glm::vec3(-5.0f, 0.0f, -3.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(1.4f, 1.4f, 1.4f), glm::vec3(0.4f, 0.2f, 0.1f) });
+
+        // Other objects
+        objects.push_back({ "models/PiggyBank.obj", glm::vec3(0.0f, 5.5f, 0.0f), glm::vec3(0.0f, 45.0f, 0.0f), glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(1.0f, 0.8f, 0.8f) });
+        objects.push_back({ "models/cube.obj", glm::vec3(-5.0f, 3.5f, -15.0f), glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.8f, 0.8f, 0.8f) });
+
 
         lights.resize(1);
-        lights[0] = { glm::vec3(0.0f, 10.0f, 0.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
+        lights[0] = { glm::vec3(0.0f, 29.0f, 0.0f), 250.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
 
         std::cout << "Scene: " << objects.size() << " objects, " << lights.size() << " lights" << std::endl;
 
@@ -415,6 +480,7 @@ private:
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
             glfwPollEvents();
+            processInput();
             drawFrame();
         }
         vkDeviceWaitIdle(device);
@@ -1089,7 +1155,7 @@ private:
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
         layoutInfo.pBindings = bindings.data();
-        
+
         if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &rtDescriptorSetLayout) != VK_SUCCESS) {
             throw std::runtime_error("failed to create RT descriptor set layout!");
         }
@@ -1286,7 +1352,7 @@ private:
         pipelineInfo.pStages = shaderStages.data();
         pipelineInfo.groupCount = static_cast<uint32_t>(shaderGroups.size());
         pipelineInfo.pGroups = shaderGroups.data();
-        pipelineInfo.maxPipelineRayRecursionDepth = 2;
+        pipelineInfo.maxPipelineRayRecursionDepth = 3;
         pipelineInfo.layout = rtPipelineLayout;
 
         auto vkCreateRayTracingPipelinesKHR = (PFN_vkCreateRayTracingPipelinesKHR)vkGetDeviceProcAddr(device, "vkCreateRayTracingPipelinesKHR");
