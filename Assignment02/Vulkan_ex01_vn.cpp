@@ -11,7 +11,7 @@
 
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <tiny_obj_loader.h>
+#include "tiny_obj_loader.h"
 
 #include <iostream>
 #include <fstream>
@@ -52,7 +52,7 @@ const bool enableValidationLayers = true;
 #endif
 
 struct Camera {
-    glm::vec3 position = glm::vec3(0.0f, 7.0f, 15.0f);
+    glm::vec3 position = glm::vec3(0.0f, 5.0f, 15.0f);
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     float yaw = -90.0f;
@@ -399,14 +399,55 @@ private:
     }
 
     void setupScene() {
-
-        objects.push_back({ "models/PiggyBank.obj", glm::vec3(0.0f, 5.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.3f, 0.2f, 0.15f) });
+        objects.push_back({ "models/Wall.obj", glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.8f, 0.8f, 0.8f) });
+        objects.push_back({ "models/table.obj", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.6f, 0.4f, 0.2f) });
+        objects.push_back({ "models/Plane.obj", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 1.0f, 10.0f), glm::vec3(0.3f, 0.3f, 0.3f) });
+        objects.push_back({ "models/cube.obj", glm::vec3(-0.8f, 4.2f, 0.0f), glm::vec3(0.0f, 45.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.0f, 0.0f, 1.0f) });
+        objects.push_back({ "models/chair.obj", glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.7f, 0.2f, 0.15f) });
+        objects.push_back({ "models/PiggyBank.obj", glm::vec3(0.8f, 3.5f, 0.0f), glm::vec3(0.0f, 180.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.3f, 0.2f, 0.15f) });
 
         lights.resize(1);
-        lights[0] = { glm::vec3(0.0f, 10.0f, 0.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
+        lights[0] = { glm::vec3(0.0f, 10.0f, 5.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
 
         std::cout << "Scene: " << objects.size() << " objects, " << lights.size() << " lights" << std::endl;
 
+    }
+
+    void processInput(float deltaTime) {
+        float cameraSpeed = camera.speed * deltaTime;
+        if (keys[GLFW_KEY_W])
+            camera.position += cameraSpeed * camera.front;
+        if (keys[GLFW_KEY_S])
+            camera.position -= cameraSpeed * camera.front;
+        if (keys[GLFW_KEY_A])
+            camera.position -= glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+        if (keys[GLFW_KEY_D])
+            camera.position += glm::normalize(glm::cross(camera.front, camera.up)) * cameraSpeed;
+        if (keys[GLFW_KEY_Q])
+            camera.position += cameraSpeed * camera.up;
+        if (keys[GLFW_KEY_E])
+            camera.position -= cameraSpeed * camera.up;
+
+        float cameraAngularSpeed = camera.angularSpeed * deltaTime;
+        if (keys[GLFW_KEY_UP])
+            camera.pitch += cameraAngularSpeed;
+        if (keys[GLFW_KEY_DOWN])
+            camera.pitch -= cameraAngularSpeed;
+        if (keys[GLFW_KEY_LEFT])
+            camera.yaw -= cameraAngularSpeed;
+        if (keys[GLFW_KEY_RIGHT])
+            camera.yaw += cameraAngularSpeed;
+
+        if (camera.pitch > 89.0f)
+            camera.pitch = 89.0f;
+        if (camera.pitch < -89.0f)
+            camera.pitch = -89.0f;
+
+        glm::vec3 front;
+        front.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+        front.y = sin(glm::radians(camera.pitch));
+        front.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+        camera.front = glm::normalize(front);
     }
 
     void mainLoop() {
@@ -414,7 +455,10 @@ private:
             float currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
+
             glfwPollEvents();
+            processInput(deltaTime);
+
             drawFrame();
         }
         vkDeviceWaitIdle(device);
@@ -1565,7 +1609,7 @@ private:
 
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
         for (const auto& availableFormat : availableFormats) {
-            if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+            if (availableFormat.format == VK_FORMAT_R8G8B8A8_UNORM && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
                 return availableFormat;
             }
         }

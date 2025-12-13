@@ -21,7 +21,13 @@ layout(binding = 2, set = 0) uniform UniformBufferObject {
     float padding2[3];
 } ubo;
 
-layout(location = 0) rayPayloadEXT vec3 hitValue;
+struct RayPayload {
+    vec3 hitValue;
+    bool isOccluded;
+    bool isShadowRay;
+};
+
+layout(location = 0) rayPayloadEXT RayPayload prd;
 
 void main() {
     const vec2 pixelCenter = vec2(gl_LaunchIDEXT.xy) + vec2(0.5);
@@ -35,6 +41,19 @@ void main() {
     float tmin = 0.001;
     float tmax = 10000.0;
 
-   hitValue = vec3(0.5, 0.5, 0.5);  
-   imageStore(image, ivec2(gl_LaunchIDEXT.xy), vec4(hitValue, 1.0));
+    prd.hitValue = vec3(0.0);
+    prd.isOccluded = false;
+    prd.isShadowRay = false;
+
+    traceRayEXT(topLevelAS,
+                gl_RayFlagsOpaqueEXT,
+                0xFF,
+                0, // sbtOffset
+                0, // sbtStride
+                0, // missIndex
+                origin.xyz, tmin,
+                direction.xyz, tmax,
+                0); // payload location
+
+    imageStore(image, ivec2(gl_LaunchIDEXT.xy), vec4(prd.hitValue, 1.0));
 }
