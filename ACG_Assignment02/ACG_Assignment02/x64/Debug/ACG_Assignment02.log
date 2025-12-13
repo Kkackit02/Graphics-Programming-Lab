@@ -7,4 +7,6 @@ D:\Git\AdvanceCG\ACG_Assignment02\Vulkan_ex01_vn.cpp(387,42): warning C4267: '='
 D:\Git\AdvanceCG\ACG_Assignment02\Vulkan_ex01_vn.cpp(479,32): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 D:\Git\AdvanceCG\ACG_Assignment02\Vulkan_ex01_vn.cpp(552,37): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 D:\Git\AdvanceCG\ACG_Assignment02\Vulkan_ex01_vn.cpp(1091,33): warning C4267: '초기화 중': 'size_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LINK : D:\Git\AdvanceCG\ACG_Assignment02\x64\Debug\ACG_Assignment02.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+LINK : warning LNK4098: 'MSVCRT' defaultlib가 다른 라이브러리와 충돌합니다. /NODEFAULTLIB:library를 사용하십시오.
   ACG_Assignment02.vcxproj -> D:\Git\AdvanceCG\ACG_Assignment02\x64\Debug\ACG_Assignment02.exe
