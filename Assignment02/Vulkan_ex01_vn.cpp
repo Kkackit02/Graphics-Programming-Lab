@@ -256,11 +256,13 @@ private:
         auto app = reinterpret_cast<RayTracedScene*>(glfwGetWindowUserPointer(window));
 
         if (action == GLFW_PRESS) {
-            app->keys[key] = true;
-
-        }
-        else if (action == GLFW_RELEASE) {
-            app->keys[key] = false;
+                        app->keys[key] = true;
+                    } else if (action == GLFW_RELEASE) {
+                        app->keys[key] = false;
+                        if (key == GLFW_KEY_SPACE) {
+                            app->lights[0].enabled = 1 - app->lights[0].enabled;
+                        }
+            
         }
     }
 
@@ -404,10 +406,11 @@ private:
         objects.push_back({ "models/Plane.obj", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 1.0f, 10.0f), glm::vec3(0.3f, 0.3f, 0.3f) });
         objects.push_back({ "models/cube.obj", glm::vec3(-0.8f, 4.2f, 0.0f), glm::vec3(0.0f, 45.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.0f, 0.0f, 1.0f) });
         objects.push_back({ "models/chair.obj", glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.7f, 0.2f, 0.15f) });
+        objects.push_back({ "models/chair.obj", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, -90.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.7f, 0.2f, 0.15f) });
         objects.push_back({ "models/PiggyBank.obj", glm::vec3(0.8f, 3.5f, 0.0f), glm::vec3(0.0f, 180.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(0.3f, 0.2f, 0.15f) });
 
         lights.resize(1);
-        lights[0] = { glm::vec3(0.0f, 10.0f, 5.0f), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
+        lights[0] = { glm::vec3(0.0f, 10.0f, 5.0f), 100.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
 
         std::cout << "Scene: " << objects.size() << " objects, " << lights.size() << " lights" << std::endl;
 
@@ -427,6 +430,7 @@ private:
             camera.position += cameraSpeed * camera.up;
         if (keys[GLFW_KEY_E])
             camera.position -= cameraSpeed * camera.up;
+           
 
         float cameraAngularSpeed = camera.angularSpeed * deltaTime;
         if (keys[GLFW_KEY_UP])

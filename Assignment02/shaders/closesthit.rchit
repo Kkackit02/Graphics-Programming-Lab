@@ -15,7 +15,7 @@ struct Light {
 };
 layout(binding = 2, set = 0) uniform UniformBufferObject {
     mat4 viewInverse;
-    mat4 projInverse;
+    mat4 projInverse;   
     vec3 cameraPos;
     float padding1;
     Light lights[3];
@@ -29,119 +29,115 @@ layout(set = 0, binding = 3, std430) buffer InstanceColors {
 };
 
 struct Vertex {
-  vec3 pos;
-  vec3 normal;
+    vec3 pos;
+    vec3 normal;
 };
-
-layout(buffer_reference, scalar) buffer Vertices { Vertex v[]; };
-layout(buffer_reference, scalar) buffer Indices { uint i[]; };
 struct ObjDesc {
-  uint64_t vertexAddress;
-  uint64_t indexAddress;
+    uint64_t vertexAddress;
+    uint64_t indexAddress;
 };
-
-layout(set = 0, binding = 4, scalar) buffer ObjDescBuffer {
-  ObjDesc i[];
+layout(set = 0, binding = 4, scalar) buffer perInstanceData { 
+    ObjDesc i[]; 
 } objDesc;
 
-struct RayPayload {
-    vec3 hitValue;
-    bool isOccluded;
-    bool isShadowRay;
-};
 
-layout(location = 0) rayPayloadInEXT RayPayload prd;
+layout(location = 0) rayPayloadInEXT vec3 hitValue;
+layout(location = 1) rayPayloadEXT bool isShadowed;
 
 hitAttributeEXT vec2 attribs;
 
+// Buffer reference bindings
+layout(buffer_reference, scalar) buffer Vertices { Vertex v[]; };
+layout(buffer_reference, scalar) buffer Indices { uint i[]; };
+
+
 vec3 getShadingNormal() {
+    // Get the object descriptor for the instance
+    ObjDesc desc = objDesc.i[gl_InstanceCustomIndexEXT];
 
-    uint objId = gl_InstanceCustomIndexEXT;
-
-    ObjDesc desc = objDesc.i[objId];
+    // Get the buffer references
     Vertices vertices = Vertices(desc.vertexAddress);
-    Indices indices = Indices(desc.indexAddress);
+    Indices  indices  = Indices(desc.indexAddress);
 
-    uint ind0 = indices.i[3 * gl_PrimitiveID + 0];
-    uint ind1 = indices.i[3 * gl_PrimitiveID + 1];
-    uint ind2 = indices.i[3 * gl_PrimitiveID + 2];
+    // Get the 3 indices of the triangle
+    uint i0 = indices.i[3 * gl_PrimitiveID + 0];
+    uint i1 = indices.i[3 * gl_PrimitiveID + 1];
+    uint i2 = indices.i[3 * gl_PrimitiveID + 2];
 
-    vec3 n0 = vertices.v[ind0].normal;
-    vec3 n1 = vertices.v[ind1].normal;
-    vec3 n2 = vertices.v[ind2].normal;
+    // Get the 3 vertices of the triangle
+    // vec3 v0 = vertices.v[i0].pos;
+    // vec3 v1 = vertices.v[i1].pos;
+    // vec3 v2 = vertices.v[i2].pos;
 
+    // Get the 3 normals of the triangle
+    vec3 n0 = vertices.v[i0].normal;
+    vec3 n1 = vertices.v[i1].normal;
+    vec3 n2 = vertices.v[i2].normal;
+
+    // Interpolate normal
     const vec3 barycentrics = vec3(1.0 - attribs.x - attribs.y, attribs.x, attribs.y);
-
     vec3 normal = n0 * barycentrics.x + n1 * barycentrics.y + n2 * barycentrics.z;
-    
-    vec3 worldNormal = normalize(vec3(normal * gl_WorldToObjectEXT));
 
-    if (dot(worldNormal, gl_WorldRayDirectionEXT) > 0.0) {
-        worldNormal = -worldNormal;
-    }
-
-
-    return worldNormal;
+    // return normalize((gl_ObjectToWorldEXT * vec4(normal, 0.0)).xyz);
+    return normalize(mat3(gl_ObjectToWorldEXT) * normal);
 }
 
 void main() {
-    // If this is a shadow ray, simply mark as occluded and return.
-    // The payload.isOccluded was initialized to false before the trace.
-    // If we hit, we set it to true.
-    if (prd.isShadowRay) {
-        prd.isOccluded = true;
-        return;
-    }
-
     vec3 worldPos = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
-    vec3 worldNormal = getShadingNormal();
     uint idx = gl_InstanceCustomIndexEXT; 
     vec3 objectColor = vec3(colors[idx].r, colors[idx].g, colors[idx].b);
 
+    vec3 normal = getShadingNormal();
+    
+    // Ambient light
     vec3 ambient = 0.1 * objectColor;
     vec3 result = ambient;
 
-    vec3 viewDir = normalize(ubo.cameraPos - worldPos);
-
+    // Loop through lights
     for (int i = 0; i < ubo.lightCount; ++i) {
-        if (ubo.lights[i].enabled == 0) continue;
+        if (ubo.lights[i].enabled == 1) {
+            vec3 lightDir = ubo.lights[i].position - worldPos;
+            float lightDist = length(lightDir);
+            lightDir = normalize(lightDir);
 
-        vec3 lightDir = normalize(ubo.lights[i].position - worldPos);
-        float dist = length(ubo.lights[i].position - worldPos);
+            // Cast shadow ray
+            isShadowed = true; // Assume shadowed
+            float tmin = 0.001; // The user's code uses 0.001 for tmin here, which is fine with the normal offset
+            float tmax = lightDist;
 
-        // Shadow ray trace
-        // Initialize payload for shadow ray
-        prd.isOccluded = false; // Assume not occluded initially
-        prd.isShadowRay = true; // Mark this ray as a shadow ray
+            // Offset the shadow ray origin slightly along the normal to prevent self-intersection (shadow acne)
+            vec3 offsetOrigin = worldPos + normal * 0.001; 
 
-        traceRayEXT(topLevelAS,
-            gl_RayFlagsOpaqueEXT | gl_RayFlagsTerminateOnFirstHitEXT, // Terminate on first hit for shadow rays
-            0xFF,
-            0, // sbtOffset (Raygen uses 0, Miss uses 1, ShadowMiss uses 2. Hit is group 3. Shadow hit would be group 4, but we're not using a separate SH. Instead, we use the `isShadowRay` flag.)
-            0, // sbtStride
-            1, // missIndex, points to shadow.rmiss
-            worldPos,
-            0.001,
-            lightDir,
-            dist,
-            0 // payload location for prd (RayPayload struct)
-        );
+            traceRayEXT(topLevelAS, 
+                        gl_RayFlagsTerminateOnFirstHitEXT | gl_RayFlagsOpaqueEXT | gl_RayFlagsSkipClosestHitShaderEXT, // Use gl_RayFlagsSkipClosestHitShaderEXT
+                        0xFF, 
+                        0, // sbt offset
+                        0, // sbt stride
+                        1, // miss shader index (for shadow)
+                        offsetOrigin, // origin
+                        tmin, 
+                        lightDir, 
+                        tmax, 
+                        1); // payload location
 
-        // Reset the flag for subsequent operations (though not strictly necessary as this prd is local to this trace)
-        prd.isShadowRay = false;
+            if (!isShadowed) {
+                // Attenuation factor (inverse square law)
+                float attenuation = 1.0 / max(1.0, lightDist * lightDist);
 
-        if (!prd.isOccluded) { // Only add diffuse/specular if not shadowed
-            // Diffuse
-            float diff = max(dot(worldNormal, lightDir), 0.0);
-            vec3 diffuse = diff * ubo.lights[i].color;
+                // Diffuse
+                float diff = max(dot(normal, lightDir), 0.0);
+                vec3 diffuse = diff * ubo.lights[i].color * ubo.lights[i].intensity * attenuation;
 
-            // Specular (Blinn-Phong)
-            vec3 halfwayDir = normalize(lightDir + viewDir);
-            float spec = pow(max(dot(worldNormal, halfwayDir), 0.0), 32.0);
-            vec3 specular = spec * ubo.lights[i].color * 0.5;
+                // Specular
+                vec3 viewDir = normalize(ubo.cameraPos - worldPos);
+                vec3 reflectDir = reflect(-lightDir, normal);
+                float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+                vec3 specular = spec * ubo.lights[i].color * ubo.lights[i].intensity * attenuation;
 
-            result += (diffuse + specular) * objectColor * ubo.lights[i].intensity;
+                result += (diffuse + specular) * objectColor;
+            }
         }
     }
-    prd.hitValue = result;
+
+    hitValue = result;
 }
