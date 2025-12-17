@@ -449,6 +449,37 @@ NURBS의 유리식(나눗셈)은 계산을 복잡하게 만듭니다. 이를 해
 
 ## Advanced Shaders I & Review
 
+### Tessellation (테셀레이션) - ACG_C10 보강
+- **정의:** GPU가 렌더링 파이프라인 내에서 기하학적 프리미티브(삼각형 등)를 더 잘게 쪼개어 디테일을 높이는 기술입니다.
+- **목적 및 장점:**
+    - **메모리 효율:** 거친(Coarse/Low-poly) 모델을 메모리에 저장하고 전송한 뒤, GPU에서 실시간으로 디테일을 생성하므로 대역폭을 절약합니다.
+    - **LOD (Level of Detail):** 카메라와의 거리에 따라 테셀레이션 레벨을 동적으로 조절하여 성능과 품질의 균형을 맞춥니다.
+    - **애니메이션 효율:** 저폴리곤 메쉬로 스키닝 및 애니메이션 연산을 수행하고, 렌더링 직전에 부드럽게 만들어 연산 비용을 줄입니다.
+- **Displacement Mapping (변위 매핑):**
+    - 테셀레이션된 정점의 위치를 텍스처(Height Map) 정보에 따라 실제로 이동시킵니다.
+    - 노멀 매핑은 실루엣이 평평해 보이고 시차 효과가 없는 반면, 변위 매핑은 실제 기하학적 구조를 변경하므로 완벽한 입체감을 제공합니다.
+
+#### 테셀레이션 파이프라인 (Tessellation Pipeline)
+OpenGL 4.0 및 DirectX 11부터 도입된 3단계 프로세스입니다. (Vertex Shader와 Geometry Shader 사이에 위치)
+
+1.  **TCS (Tessellation Control Shader):**
+    - **입력:** 패치(Patch, 사용자 정의 정점 그룹) 단위.
+    - **역할:**
+        - **Tessellation Levels 결정:** `gl_TessLevelInner`(내부 분할)와 `gl_TessLevelOuter`(가장자리 분할) 변수를 설정하여 TPG에게 얼마나 잘게 쪼갤지 지시합니다.
+        - 레벨이 0 이하이면 해당 패치는 렌더링에서 제외(Culling)됩니다.
+    - **제어:** 카메라 거리, 화면 차지 면적, 곡률 등을 기반으로 레벨을 계산합니다.
+
+2.  **TPG (Tessellation Primitive Generator) / Tessellator:**
+    - **역할:** 고정 함수(Fixed-function) 하드웨어 단계입니다. TCS에서 설정한 레벨에 따라 추상적인 패치 도메인(사각형, 삼각형, 선)을 실제 정점들로 분할합니다.
+    - **출력:** 각 정점의 정규화된 파라메트릭 좌표 `(u, v)` 또는 `(u, v, w)`.
+
+3.  **TES (Tessellation Evaluation Shader):**
+    - **입력:** TPG가 생성한 `(u, v)` 좌표와 TCS에서 전달받은 패치 데이터.
+    - **역할:** 각 정점의 **최종 월드 위치를 계산**합니다.
+        - 베지에 곡면 수식(`B-Spline`, `NURBS` 등)을 적용하거나,
+        - 변위 맵(Displacement Map)을 텍스처링하여 정점을 법선 방향으로 이동시킵니다.
+    - 버텍스 쉐이더처럼 MVP 행렬 변환을 수행하여 화면에 출력합니다.
+
 ### 프로그래밍 가능한 그래픽스 파이프라인 (Programmable Graphics Pipeline)
 *   **고정 함수 파이프라인 (Fixed Function Pipeline) 대비:**
     *   **GPU 프론트엔드:** Vtx 인덱스 -> 프리미티브 어셈블리 -> 래스터화 및 보간 -> 래스터 연산 -> 픽셀 업데이트 -> 프레임 버퍼
@@ -552,146 +583,309 @@ NURBS의 유리식(나눗셈)은 계산을 복잡하게 만듭니다. 이를 해
 
 ---
 
-## Image Processing with Shader
+## Image Processing with Shader (상세 보강)
 
-### 이미지 처리 (Image Processing)
-*   **GPGPU (General-Purpose computation on Graphics Processing Units):** GPU를 이용한 일반 목적 컴퓨팅.
-*   **입력:** 이미지
-*   **출력:** 처리된 이미지
-*   **커널 (Kernel):** 각 픽셀에서 실행되는 연산.
-*   **이미지 처리 예시:** 이미지 반전 (Image Negative), 엣지 검출 (Edge Detection), 툰 렌더링 (Toon Rendering).
-*   **이미지 처리 질문:**
-    *   GPU가 이미지 처리에 적합한가? (데이터 병렬성)
-    *   버스 트래픽은?
-    *   어떤 타입의 쉐이더가 이미지 처리 커널을 구현해야 하는가? (프래그먼트 쉐이더)
+### 1. 기본 연산 (Basic Operations)
+이미지 처리는 픽셀 값을 조작하여 화질을 개선하거나 정보를 추출하는 과정입니다.
+- **히스토그램 (Histogram):** 이미지의 밝기 분포를 나타내는 그래프.
+    - **평활화 (Equalization):** 픽셀들이 전 밝기 영역에 골고루 분포하도록 비선형 변환을 적용하여 대비(Contrast)를 극대화합니다.
+- **점 연산 (Point Operations):** 한 픽셀의 출력 값이 해당 입력 픽셀 값에만 의존합니다.
+    - **Thresholding (이진화):** 특정 값 이상은 흰색, 이하는 검은색으로 변환 (배경/물체 분리).
+    - **Contrast Stretching:** 좁은 밝기 범위를 전체 영역으로 늘려 선명하게 만듭니다.
+- **대수 연산 (Algebraic Operations):** 두 개 이상의 이미지를 픽셀별로 연산합니다.
+    - **덧셈 (Addition):** 여러 장의 이미지를 평균내어 랜덤 노이즈를 제거(`Frame Averaging`).
+    - **뺄셈 (Subtraction):** 배경 이미지를 빼서 움직이는 물체만 검출(`Motion Detection`)하거나 배경을 제거.
+    - **곱셈/나눗셈:** 마스킹(Masking)이나 조명 보정 등에 사용.
 
-### 이미지 처리: GPU 설정 (GPU Setup)
-*   **입력:** 텍스처, 뷰포트 정렬 쿼드 (Viewport-aligned quad, 전체 화면 쿼드)
-*   **출력:** 프레임버퍼
-*   **커널:** 프래그먼트 쉐이더
-*   **GPU 설정 과정:**
-    1.  뷰포트 정렬 쿼드 렌더링.
-    2.  각 화면 픽셀에 대해 프래그먼트가 호출됨.
-    3.  각 프래그먼트 쉐이더는 텍셀로 저장된 이미지의 어떤 부분에도 접근 가능 (`gather`).
-    4.  각 프래그먼트 쉐이더는 커널을 실행하고 프레임버퍼에 색상을 기록.
-*   **텍스처 좌표 저장:**
-    *   **버텍스 쉐이더:** `in vec3 Position; in vec2 Texcoords; out vec2 fs_Texcoords;`
-    *   **프래그먼트 쉐이더:** `uniform sampler2D u_Image; in vec2 fs_Texcoords; out vec4 out_Color;`
-    *   `gl_Position = vec4(Position, 1.0); fs_Texcoords = Texcoords;`
-    *   `out_Color = texture(u_Image, fs_Texcoords);`
-*   **프래그먼트 쉐이더에서 텍스처 좌표 계산:**
-    *   `uniform vec2 u_inverseViewportDimensions;`
-    *   `vec2 txCoord = u_inverseViewportDimensions * gl_FragCoord.xy;`
-    *   `out_Color = texture(u_Image, txCoord);`
-    *   `u_inverseViewportDimensions`는 뷰포트 크기의 역수.
-*   **인접 텍셀 접근 방법:**
-    *   `textureOffset()` 사용: 오프셋은 상수여야 함 (`ivec2(x, y)`와 같은 변수는 허용되지 않음).
-    *   `textureSize()`와 `delta`를 이용한 수동 계산:
-        *   `vec2 delta = 1.0 / textureSize(u_Image);`
-        *   `texture(u_Image, txCoord + (delta * vec2(-1.0, 0.0)));`
+### 2. 지역 연산 (Local Operations & Filtering)
+출력 픽셀 값이 입력 픽셀과 그 주변 이웃 픽셀들의 값에 의해 결정됩니다. 주로 **컨볼루션(Convolution)** 마스크를 사용합니다.
+- **스무딩 (Smoothing/Low Pass):**
+    - **Box Filter (Average):** 주변 픽셀의 평균값 사용. 블러링 효과 및 노이즈 감소.
+    - **Gaussian Filter:** 중심에 가중치를 둔 평균. 더 자연스러운 블러링.
+    - **Median Filter:** 주변 값 중 중간값을 선택. 엣지를 보존하면서 소금-후추 노이즈(Salt & Pepper Noise) 제거에 탁월.
+- **엣지 검출 (Edge Detection/High Pass):** 밝기 변화량이 큰 부분을 찾습니다.
+    - **Gradient:** 인접 픽셀간의 차이 계산 (`[-1, 1]`).
+    - **Sobel Operator:** 수평/수직 방향의 변화를 각각 계산하여 합침. 노이즈에 비교적 강함.
+    - **Laplacian:** 2차 미분 기반. 모든 방향의 엣지 검출. (`[[0,1,0],[1,-4,1],[0,1,0]]`)
 
-### Convolution (합성곱)
-- 커널(필터) 행렬을 이미지 전체에 이동시키며 적용하는 연산.
-- **예시 커널:**
-    - **Box Blur:** `[[1,1,1], [1,1,1], [1,1,1]] / 9`
-    - **Sharpen:** `[[0,-1,0], [-1,5,-1], [0,-1,0]]`
-    - **Sobel (Edge Detection):** 수평/수직 엣지를 검출하는 별도의 커널 사용.
-- **쉐이더 구현:** 현재 픽셀 주변의 텍스처를 여러 번 샘플링(`texture()`)하여 커널 값과 곱하고 더함.
+### 3. 주파수 도메인 (Frequency Domain)
+- **푸리에 변환 (Fourier Transform):** 이미지를 공간 도메인에서 주파수 도메인으로 변환합니다. 이미지는 사인파의 합으로 표현됩니다.
+- **필터링:** 주파수 영역에서 특정 주파수 대역을 차단하거나 증폭시킨 후 다시 역변환합니다.
+    - **Low Pass:** 고주파(상세 정보, 노이즈) 제거 -> 부드러운 이미지 복원.
+    - **High Pass:** 저주파(전반적 밝기 분포) 제거 -> 엣지 및 디테일 강조.
 
-### Frequency Domain Filtering
-- **Fourier Transform:** 이미지를 공간 영역 -> 주파수 영역으로 변환.
-- **Low-pass Filter:** 고주파(엣지, 노이즈)를 제거 -> 블러, 노이즈 감소.
-- **High-pass Filter:** 저주파(부드러운 영역)를 제거 -> 엣지 강조.
-
-### 이미지 처리: 커널 예시 (Kernel Examples)
-*   **이미지 반전 (Image Negative):** `out_Color = vec4(1.0) - texture(u_Image, fs_Texcoords);`
-*   **가우시안 블러 (Gaussian Blur):**
-    *   3x3 가우시안 블러 필터: `1/16 * [[1,2,1], [2,4,2], [1,2,1]]`
-    *   필터 요소의 합은 1.
-    *   엣지 검출, 샤프닝, 엠보싱 등 다른 필터도 사용 가능.
-    *   프래그먼트 쉐이더 구현 방법, 메모리 일관성 (3x3, 5x5 등)
-
-### 이미지 처리: Read backs (`glReadPixels`)
-*   **`glReadPixels`:** 프레임버퍼의 컬러 버퍼를 읽어와 CPU 메모리에 할당된 버퍼에 저장.
-*   **문제점:** GPU에서 CPU로 데이터를 다시 읽어오는 것은 성능 저하를 야기하는 주요 문제.
-*   **사용 사례:** 포토샵 유형 애플리케이션.
-*   **`glReadPixels`가 필요 없는 경우:** 게임의 후처리, 실시간 비디오 조작, 증강 현실.
+### 4. 영상 분석 (Image Analysis)
+- **분할 (Segmentation):** 이미지를 의미 있는 영역(객체 vs 배경)으로 나눕니다. (Thresholding, Edge-based 등)
+- **경계 추적 (Boundary Tracking):** 객체의 외곽선을 따라가며 좌표를 추출합니다 (Chain Code 등).
+- **특징 추출:** 객체를 식별하기 위한 수치적 특징을 계산합니다.
+    - **면적(Area), 둘레(Perimeter)**
+    - **원형도(Circularity):** `P^2/A` (원일 때 최소값 4π). 모양이 복잡할수록 값이 커짐.
+    - **오일러 수(Euler Number):** `객체 수 - 구멍 수`. 위상학적 특징.
 
 ---
 
-## ACG_C14-2_FBO
+## ACG_C14-2_FBO: Framebuffer Object (상세 보강)
 
-### Framebuffer Object (FBO)
-- **정의:** 화면(Default Framebuffer)이 아닌, 사용자가 생성하는 오프스크린 버퍼. 렌더링 결과를 텍스처에 쓸 수 있게 함.
-- **구성:**
-    - **Color Attachment:** 렌더링된 색상 이미지를 저장할 텍스처.
-    - **Depth/Stencil Attachment:** 깊이/스텐실 값을 저장할 텍스처 또는 렌더버퍼.
-- **활용:**
-    - **Render-to-Texture:** 거울, CCTV 화면, 동적 텍스처 생성.
-    - **Post-Processing:** 씬을 텍스처에 렌더링 후, 해당 텍스처에 블러, DoF, 색상 보정 등 전체 화면 효과 적용.
-    - **Deferred Shading:** G-Buffer(위치, 법선, Albedo 등)를 여러 텍스처에 렌더링 후, 한 번의 조명 패스에서 최종 색상 계산.
+### 1. 개요
+- 기본 프레임버퍼(Default Framebuffer)는 화면(윈도우)에 직접 출력하는 메모리 영역입니다.
+- **FBO (Framebuffer Object):** 화면에 보이지 않는(Off-screen) 메모리 버퍼를 생성하여, 렌더링 결과를 **텍스처**나 **렌더버퍼**에 저장할 수 있게 해주는 OpenGL 객체입니다.
 
----
+### 2. 구성 요소 및 생성 단계
+FBO 자체는 데이터를 저장하지 않는 컨테이너이며, 실제 데이터가 저장될 'Attachments'가 필요합니다.
 
-## Interpolation
+1.  **FBO 생성:** `glGenFramebuffers(1, &fbo)`, `glBindFramebuffer(GL_FRAMEBUFFER, fbo)`.
+2.  **Texture Attachment (컬러 버퍼용):**
+    - 렌더링 결과를 텍스처 이미지로 저장하여 나중에 쉐이더에서 샘플링할 수 있습니다.
+    - `glGenTextures`, `glBindTexture`.
+    - `glTexImage2D(..., NULL)`: 데이터를 비워둔 채 메모리만 할당합니다.
+    - **부착:** `glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_id, 0)`.
+3.  **Renderbuffer Attachment (깊이/스텐실 버퍼용):**
+    - 텍스처링이 필요 없고(샘플링 안 함) 렌더링 중 깊이/스텐실 테스트용으로만 쓸 때, 텍스처보다 최적화되어 있어 성능상 유리합니다.
+    - `glGenRenderbuffers`, `glBindRenderbuffer`.
+    - `glRenderbufferStorage(..., GL_DEPTH24_STENCIL8, width, height)`.
+    - **부착:** `glFramebufferRenderbuffer(..., GL_DEPTH_STENCIL_ATTACHMENT, ..., rbo_id)`.
+4.  **완전성 검사:** `glCheckFramebufferStatus`가 `GL_FRAMEBUFFER_COMPLETE`를 반환하는지 확인해야 합니다.
+5.  **렌더링 루프:**
+    - `glBindFramebuffer(..., fbo)`: FBO 활성화.
+    - `glViewport(...)`: FBO 텍스처 크기에 맞게 뷰포트 설정.
+    - 씬 렌더링 (결과가 텍스처에 그려짐).
+    - `glBindFramebuffer(..., 0)`: 기본 프레임버퍼로 복귀.
+    - `glViewport(...)`: 화면 크기로 복귀.
+    - 저장된 텍스처를 사용하여 화면에 사각형을 그리거나(Post-processing), 다른 물체에 입힘(Mirror, CCTV).
 
-- **Linear (Lerp):** `P(t) = (1-t)P0 + tP1`. C0 연속성.
-- **Cubic (Hermite, Bezier):** C1 연속성. 부드러운 움직임.
-- **Catmull-Rom Spline:**
-    - 제어점을 모두 통과하는 보간 곡선. 키프레임 애니메이션에 적합.
-    - `P1`과 `P2` 사이를 보간하기 위해 `P0`와 `P3`를 접선 계산에 사용.
-- **Quaternion Interpolation (회전 보간):**
-    - **Slerp (Spherical Linear Interpolation):** 짐벌락 없이 두 쿼터니언 사이를 최단 경로로 부드럽게 보간.
-      `q_slerp(q0, q1, t) = q0 * (q0^-1 * q1)^t`
-
----
-
-## Animation
-
-### 보간 기반 애니메이션 (Keyframing)
-- 애니메이터가 키프레임의 포즈를 만들면, 그 사이를 컴퓨터가 보간.
-- **Animation Curve:** 시간 대 속성 값의 그래프.
-- **Graph Editor:** 이 커브를 직접 편집하여 가속/감속 등 미세한 제어.
-
-### 계층적 애니메이션
-- **Forward Kinematics (FK):** 부모 관절의 변환이 자식에게 상속. 직관적이지만, 말단 제어가 어려움.
-  `World_Child = World_Parent * Local_Child`
-- **Inverse Kinematics (IK):** 말단 이펙터의 목표 위치를 주면, 관절 체인의 회전값을 역으로 계산.
-  - **알고리즘:** CCD, FABRIK. 반복적(iterative) 해법이 일반적.
-
-### 인간형 애니메이션
-- **Skinning (Vertex Blending):** 뼈대의 움직임에 따라 메쉬를 변형.
-    - **Linear Blend Skinning (LBS):** 각 정점 위치를, 영향을 주는 뼈들의 변환 행렬에 가중치를 곱해 선형 혼합. 관절이 접힐 때 부피가 줄어드는 문제 발생.
-    - **Dual Quaternion Skinning (DQS):** 듀얼 쿼터니언으로 회전과 이동을 함께 보간. LBS의 부피 손실 문제를 개선.
-
-### 모션 리타겟팅
-- 한 캐릭터의 모션을 다른 비율의 캐릭터에 적용.
-- **과정:** 뼈대 매핑 -> 로컬 회전값 복사 -> IK와 위치 조정을 통해 발 미끄러짐 등 아티팩트 수정.
+### 3. 활용
+- **Render-to-Texture:** 거울 반사, 보안카메라 화면, 동적 큐브 맵 등.
+- **Post-Processing (후처리):** 씬 전체를 텍스처로 렌더링한 후, 프래그먼트 쉐이더에서 블러, 블룸(Bloom), 톤 매핑, 엣지 강조 등의 효과를 적용하여 최종 출력.
+- **Shadow Mapping:** 빛의 시점에서 깊이 값만 렌더링하여 Depth Map(Shadow Map)을 생성.
+- **Deferred Shading:** 위치, 법선, 색상 정보를 각각 다른 텍스처(G-Buffer)에 저장한 후, 나중에 조명 연산을 수행.
 
 ---
 
-## Dynamics
+## Computer Animation & Interpolation (ACG_C15, C16 보강)
 
-### 입자 시스템 (Particle System)
-- **속성:** 위치, 속도, 가속도, 수명, 질량 등.
-- **업데이트 루프 (수치 적분):**
-  `force = ...`
-  `acceleration = force / mass`
-  `velocity += acceleration * dt`
-  `position += velocity * dt`
+### 1. 애니메이션 개요
+- **정의:** 생명이 없는 물체에 움직임을 부여하여 살아있는 것처럼 보이게 하는 기술.
+- **기법:**
+    - **Key-frame Animation:** 주요 시점(Keyframe)의 포즈를 잡고, 그 사이를 보간(Interpolation)으로 채움.
+    - **Motion Capture:** 실제 사람/동물의 움직임을 센서로 기록하여 적용. 데이터 기반.
+    - **Physics-based:** 물리 법칙(힘, 중력, 충돌)을 시뮬레이션하여 움직임 생성.
+
+### 2. 보간 (Interpolation) 기법
+주어진 제어점(Control Points)들을 부드럽게 연결하는 곡선을 생성합니다.
+- **선형 보간 (Linear):** 두 점을 직선으로 연결. 움직임이 딱딱하고 불연속적(`C0`).
+- **다항식 보간 (Polynomial):**
+    - **Lagrange:** 모든 점을 통과하는 n차 다항식. 점이 많아지면 진동(Runge's Phenomenon) 발생.
+    - **Hermite:** 양 끝점의 위치와 접선(Tangent) 벡터로 정의. 제어가 직관적.
+    - **Catmull-Rom Spline:** 제어점만 주어지면 자동으로 부드러운 접선을 계산하여 모든 점을 통과하는 곡선 생성. (이전/다음 점을 이용해 접선 계산).
+    - **Bezier Curve:** 시작/끝점만 통과하고 중간 점들은 곡선의 당김(Approximation) 역할. 기하학적 제어가 용이.
+    - **B-Spline / NURBS:** 국부 제어(Local Control)가 가능하고 연속성이 보장되는 근사 곡선.
+
+### 3. 속도 제어 (Speed Control)
+경로(Path)와 속도(Speed)는 독립적으로 제어되어야 합니다.
+- **문제점:** 매개변수 `u`를 등간격으로 증가시켜도, 제어점 간격에 따라 실제 이동 거리(속도)가 불균일할 수 있습니다.
+- **Arc Length Reparameterization (호 길이 매개변수화):**
+    - `u` 대신 이동 거리 `s`를 함수 인자로 사용 (`p = P(U(s))`).
+    - **구현:** `u`에 따른 곡선 길이 `s(u)`를 적분(수치해석 또는 근사)으로 구하여 테이블(Look-up Table)을 만들고, 역함수 `u(s)`를 통해 원하는 거리만큼 이동한 `u`를 찾습니다.
+- **Ease-in / Ease-out:**
+    - 움직임의 시작과 끝을 부드럽게 가감속 처리.
+    - `s = f(t)` 함수를 사용 (Sinusoidal, Cubic, Piecewise Linear 등). `t`가 일정하게 흐를 때 `s`(이동 거리)는 부드럽게 변화.
+
+### 4. 방향 제어 (Orientation Control)
+물체가 곡선을 따라 이동할 때 어디를 바라볼지 결정합니다.
+- **Frenet Frame:** 곡선의 접선(Tangent), 법선(Normal), 종법선(Binormal)으로 좌표계 구성.
+    - 문제점: 변곡점에서 프레임이 급격히 뒤집히거나, 비틀림(Torsion) 문제 발생.
+- **Parallel Transport / Reflection:** 이전 프레임의 방향을 최소한으로 회전시켜 다음 프레임의 방향 결정. 급격한 회전 방지.
+- **Up Vector 지정:** 카메라 제어 등에서 '위쪽' 방향을 고정하여 비틀림 방지.
+
+### 5. 쿼터니언 (Quaternion) 회전 보간
+3차원 회전을 4차원 벡터 `(x, y, z, w)`로 표현합니다.
+- **장점:** 짐벌 락(Gimbal Lock) 문제 해결, 오일러 각도보다 보간이 훨씬 부드럽고 자연스러움.
+- **구면 선형 보간 (Slerp - Spherical Linear Interpolation):**
+    - 두 쿼터니언 `q1`, `q2` 사이를 4차원 구면 위에서 최단 경로(Great Arc)를 따라 등속 회전.
+    - `Slerp(q1, q2, t) = (sin((1-t)θ)/sinθ)*q1 + (sin(tθ)/sinθ)*q2`.
+- **Squad (Spherical Cubic Interpolation):** 쿼터니언 버전의 베지에 곡선. 연속적인 회전 키프레임을 부드럽게(`C1`, `C2`) 연결. `Bisect`와 `Double` 연산자를 이용해 제어점(Control Quaternion)을 생성하여 보간.
+
+### 6. 계층적 애니메이션 (Hierarchical Animation) - ACG_C19, C20 보강
+사람이나 동물처럼 여러 관절로 연결된 복잡한 물체를 애니메이션하기 위해 계층 구조(Tree Structure)를 사용합니다.
+- **구조:**
+    - **Node (Link/Segment):** 뼈대(Bone)에 해당. 형태를 가짐.
+    - **Arc (Joint):** 관절. 부모 노드와 자식 노드 사이의 변환(회전, 이동)을 정의.
+- **Forward Kinematics (FK, 순운동학):**
+    - 상위(부모) 관절의 변환이 하위(자식) 관절에 순차적으로 전파됨.
+    - **제어:** 각 관절의 각도(`θ`)를 직접 입력 -> 말단(End Effector)의 위치가 결정됨.
+    - **구현:** 트리 순회(Traversal)를 하며 행렬 스택(Push/Pop)을 이용해 로컬 변환을 누적(`M_global = M_parent * M_local`).
+
+### 7. 역운동학 (Inverse Kinematics, IK)
+- **개념:** 말단(End Effector)이 도달해야 할 **목표 위치(Goal Position)**를 주면, 그 위치에 닿기 위한 **각 관절의 각도**를 컴퓨터가 역으로 계산해내는 기법.
+- **해석적 방법 (Analytic):**
+    - 삼각함수(코사인 제2법칙 등)를 이용해 수식으로 정확한 해를 구함.
+    - 계산이 빠르지만, 관절 수가 적고 구조가 간단할 때만 가능.
+- **수치적 방법 (Numeric) - 반복적(Iterative) 해법:**
+    - **Jacobian Matrix (자코비안 행렬):** 관절 각도의 미세한 변화(`dθ`)가 말단 위치의 미세한 변화(`dX`)에 미치는 영향을 나타내는 행렬. `dX = J * dθ`.
+    - **Pseudo-inverse (의사 역행렬):** `J`가 정방행렬이 아닐 때(자유도가 남거나 부족할 때) 역행렬 대신 `J+`를 사용하여 `dθ = J+ * dX`를 구함.
+    - **Damped Least Squares:** 팔을 완전히 뻗는 등 특이점(Singularity) 상황에서 값이 발산하여 동작이 튀는 것을 막기 위해 감쇠(Damping) 항을 추가하여 안정화.
+    - **CCD (Cyclic Coordinate Descent):** 말단 관절부터 루트 관절까지 차례대로, 현재 관절을 회전시켜 말단을 목표 지점에 가장 가깝게 맞추는 과정을 반복하는 휴리스틱 기법. 구현이 쉽고 빠르며 관절 제한(Joint Limit) 적용이 용이함.
+
+### 8. 모션 캡처 및 리타겟팅 (Motion Capture & Retargeting) - ACG_C21, C22 보강
+
+#### a) 모션 캡처 (Motion Capture)
+- 연기자의 몸에 마커를 부착하거나(Optical, Magnetic), 마커 없이(Kinect, Image metrics) 관절의 움직임을 기록하여 디지털 캐릭터에 적용합니다.
+- **방식:**
+    - **광학식 (Optical):** 정확도가 높으나 마커가 가려지는(Occlusion) 문제 발생 가능. (Passive/Active 마커)
+    - **자기식 (Magnetic):** 실시간 처리가 용이하나 금속 물체에 간섭을 받음.
+    - **기계식 (Electro-Mechanical):** 외골격 슈트 착용. 정확하지만 움직임이 제한적.
+
+#### b) 모션 리타겟팅 (Motion Retargeting)
+- **정의:** 한 캐릭터(Source)의 애니메이션을 신체 비율이나 구조가 다른 캐릭터(Target)에게 적용하는 기술.
+- **문제점:**
+    - 단순히 관절 각도만 복사하면, 발이 땅에 닿지 않거나(Floating), 땅을 뚫고 들어가거나(Penetration), 자신의 몸을 통과하는(Self-collision) 현상 발생.
+    - **Footskate (Foot Sliding):** 발이 고정되어야 할 시점에 미끄러지는 현상.
+- **해결 방법 (Spacetime Constraints):**
+    - 전체 동작을 시공간(Spacetime) 상의 최적화 문제로 정의합니다.
+    - **목적 함수 (Objective Function):** 원본 동작과의 차이를 최소화 (`Minimize |m(t) - m_origin(t)|^2`).
+    - **제약 조건 (Constraints):** "특정 시간에 발은 지면(y=0)에 있어야 한다", "손은 특정 지점에 닿아야 한다" 등의 조건을 만족해야 함.
+    - **Motion Displacement Map:** 원본 모션에 저주파(부드러운) 변위 맵(`d(t)`)을 더하여 고주파(떨림) 노이즈 없이 동작을 수정합니다.
+- **딥러닝 기반 리타겟팅 (Skeleton-Aware Networks):**
+    - 서로 다른 위상(Topology)을 가진 골격 간의 리타겟팅을 위해, 공통된 추상 골격(Primal Skeleton)을 정의하고 딥러닝 네트워크(Encoder-Decoder 구조)를 통해 모션을 변환합니다.
+
+---
+
+---
+
+## Animating Virtual Humans: 가상 인간 애니메이션 (ACG_C23, C24 추가)
+
+### 1. 신체 모델링 (Body Modeling)
+가상 인간을 만들기 위해서는 기하학적 형태(Geometry)와 움직임을 위한 구조(Structure)가 필요합니다.
+- **모델링 방식:** 폴리곤 메쉬(Polygon Mesh)가 가장 일반적이며, 디테일을 위해 세분화 곡면(Subdivision Surfaces)을 사용하기도 합니다.
+- **표준 구조 (H-Anim):** 캐릭터의 관절 이름과 계층 구조를 표준화하여 애니메이션 데이터의 호환성을 높입니다 (예: `l_shoulder`, `r_knee`).
+- **리깅 (Rigging):** 모델 내부에 뼈대(Skeleton)를 심고, 뼈와 피부(Mesh)를 연결하는 과정입니다.
+- **스키닝 (Skinning):**
+    - **Linear Blend Skinning (LBS):** 하나의 정점이 여러 뼈의 영향을 받을 때, 각 뼈의 변환 행렬에 가중치(Weight)를 곱해 평균을 냅니다. `v' = Σ (w_i * M_i) * v`.
+    - 관절이 굽혀질 때 부피가 줄어드는 '사탕 포장지 현상(Candy-wrapper effect)'이 발생할 수 있습니다.
+
+### 2. 신체 제어 (Body Control)
+- **상체 (Reaching):** 손이 특정 위치에 도달하는 동작. 어깨(3자유도), 팔꿈치(1자유도), 손목의 움직임을 조합하여 IK로 해결합니다.
+- **하체 (Walking):**
+    - 걷기는 주기적인 사이클(Walk Cycle)을 가집니다. (Stance phase vs Swing phase).
+    - **Pelvic Transport:** 자연스러운 걷기를 위해 골반은 단순히 이동만 하는 것이 아니라 회전(Rotation), 기울기(Tilt), 측면 이동(Lateral displacement)이 복합적으로 일어납니다.
+- **손 (Grasping):** 물체의 형태에 따라 손가락 관절을 제어하여 잡는 동작.
+
+### 3. 얼굴 애니메이션 (Facial Animation)
+얼굴은 뼈대가 아닌 근육의 수축/이완으로 피부가 움직이는 복잡한 구조입니다.
+- **FACS (Facial Action Coding System):**
+    - 심리학자 Ekman이 정의한 얼굴 표정 코딩 시스템.
+    - 얼굴의 움직임을 46개의 **Action Units (AU)**로 분해합니다. (예: AU1=눈썹 안쪽 올리기, AU12=입꼬리 당기기).
+    - 감정(Emotion)은 여러 AU의 조합으로 표현됩니다 (행복 = AU6 + AU12).
+- **구현 방식:**
+    - **Blend Shapes (Morph Target):** '웃는 얼굴', '화난 얼굴' 등 미리 만들어진 표정 타겟들을 가중치(0~1)를 주어 섞습니다(Linear Interpolation). 직관적이고 퀄리티가 좋지만, 많은 메모리를 차지합니다.
+    - **Muscle-based:** 실제 해부학적 근육 구조를 벡터나 스프링으로 모델링하여 시뮬레이션합니다.
+    - **MPEG-4 FBA:** 얼굴 애니메이션을 위한 국제 표준 파라미터(FAP)를 정의하여 저대역폭 전송을 지원합니다.
+
+---
+
+## Dynamics: 동역학 (ACG_C25 보강)
+
+### 1. 기본 물리 법칙
+- **뉴턴의 제2법칙:** `F = ma` (힘 = 질량 × 가속도). 물체의 움직임을 결정하는 기본 식입니다.
+- **상태 변수:** 위치(`x`), 속도(`v`), 가속도(`a`), 운동량(`P = mv`).
+- **수치 적분 (Numerical Integration):** 미분방정식을 시간 단위(`dt`)로 근사하여 푸는 과정.
+    - `v_new = v_old + a * dt`
+    - `x_new = x_old + v_new * dt`
 - **적분 방법:**
-    - **Explicit Euler:** 간단하지만 불안정.
-    - **Verlet, Runge-Kutta 4 (RK4):** 더 정확하고 안정적.
+    - **Explicit Euler:** 가장 간단하지만 오차가 누적되어 불안정합니다(에너지 발산).
+    - **Runge-Kutta 4 (RK4):** 한 스텝 내에서 4번의 기울기를 계산하여 가중 평균을 내므로 매우 정확하고 안정적입니다.
 
-### 강체 동역학 (Rigid Body Dynamics)
-- **상태:** 위치, 회전(쿼터니언), 선형/각 운동량.
-- **충돌 처리:**
-    1. **Collision Detection:** AABB, Sphere, OBB, GJK 알고리즘 등으로 충돌 여부 판별.
-    2. **Collision Response:** 충돌 지점, 법선, 깊이를 계산. 충격량(Impulse) 기반으로 운동량을 갱신하여 겹침을 해결하고 반발력을 적용.
+### 2. 힘의 종류 (Forces)
+- **중력 (Gravity):** `F = mg`. 지구 중심 방향으로 당기는 힘.
+- **마찰력 (Friction):** 물체의 운동을 방해하는 힘.
+    - 정지 마찰력 (`F_s <= μ_s * N`): 물체가 움직이지 않을 때 버티는 힘.
+    - 운동 마찰력 (`F_k = μ_k * N`): 움직이는 물체에 작용하는 힘.
+- **점성/항력 (Viscosity/Drag):** 유체(공기, 물) 속에서 움직일 때 받는 저항. 속도에 비례하고 방향은 반대입니다. `F_drag = -k * v`.
+- **스프링-댐퍼 (Spring-Damper):** 탄성체 모델링의 핵심.
+    - **Hooke's Law (탄성력):** `F_s = k_s * (L_current - L_rest)`. 원래 길이로 돌아가려는 힘.
+    - **Damping (감쇠력):** `F_d = -k_d * v_relative`. 진동을 멈추게 하는 힘.
+    - **총 힘:** `F = F_s + F_d`.
+
+### 3. 충돌 (Collision)
+- **충돌 감지 (Detection):** 기하학적 교차 검사.
+- **충돌 반응 (Response):** 충돌 후 속도와 위치 보정. 충격량(Impulse)을 가하여 순간적으로 속도를 변화시킵니다.
+- **운동량 보존 (Conservation of Momentum):** 외부 힘이 없을 때, 충돌 전후의 총 운동량은 같습니다. `Σmv_before = Σmv_after`.
+- **충돌 종류:**
+    - **탄성 충돌 (Elastic):** 운동 에너지가 보존됨 (튕겨 나감).
+    - **비탄성 충돌 (Inelastic):** 운동 에너지가 손실됨 (찌그러짐, 열 발생).
+    - **반발 계수 (Coefficient of Restitution, e):** `v_rel_after = -e * v_rel_before`. (1: 완전 탄성, 0: 완전 비탄성).
+
+### 4. 강체 동역학 (Rigid Body Dynamics)
+- **정의:** 힘을 받아도 형태가 변하지 않는 물체.
+- **회전 운동:** 질량(`m`) 대신 **관성 텐서(Inertia Tensor, I)**, 힘(`F`) 대신 **토크(Torque, τ)**, 속도(`v`) 대신 **각속도(ω)**를 사용합니다.
+    - `τ = I * α` (토크 = 관성 모멘트 × 각가속도).
+    - `L = I * ω` (각운동량 = 관성 모멘트 × 각속도).
+- **관성 텐서 (I):** 회전축에 따른 회전 저항성을 나타내는 3x3 행렬. 물체의 형상과 질량 분포에 따라 결정됩니다.
+
+### 5. 입자 시스템 (Particle Systems)
+- 연기, 불, 비, 폭발 등 형태가 불분명한 현상을 수많은 점(Particle)으로 표현합니다.
+- **생명 주기 (Lifecycle):**
+    1.  **생성 (Birth):** 발생원(Emitter)에서 초기 위치, 속도, 수명 등을 랜덤하게 할당하여 생성.
+    2.  **갱신 (Update):** 매 프레임마다 힘(중력, 바람 등)을 적용하여 속도/위치 갱신, 수명 감소.
+    3.  **렌더링 (Render):** 점, 빌보드(Billboard), 궤적 등으로 화면에 그림.
+    4.  **소멸 (Death):** 수명이 다하거나 화면을 벗어나면 제거.
+
+---
+
+## Fluid Animation: 유체 애니메이션 (ACG_C26 추가)
+
+### 1. 유체의 특성
+- **비정형성:** 고정된 형태가 없고 부피(Volume)를 가집니다.
+- **비압축성 (Incompressible):** 물과 같이 압력을 가해도 부피가 거의 줄어들지 않는 성질. `∇·v = 0` (속도장의 발산이 0).
+- **점성 (Viscosity):** 끈적임의 정도. (꿀 > 물).
+
+### 2. 시뮬레이션 방식
+- **Lagrangian (라그랑지안, 입자 기반):**
+    - 유체를 수많은 입자(Particle)로 봅니다. 각 입자의 이동을 추적합니다.
+    - **SPH (Smoothed Particle Hydrodynamics):** 커널 함수를 이용해 주변 입자들의 영향을 부드럽게 합산하여 밀도와 압력을 계산합니다. 물방울 표현에 유리.
+- **Eulerian (오일러리안, 격자 기반):**
+    - 공간을 고정된 격자(Grid)로 나눕니다. 유체가 격자를 통과할 때 각 셀(Cell)의 속도, 밀도, 압력 변화를 계산합니다.
+    - **Stable Fluids:** 격자 기반의 안정적인 시뮬레이션 기법. 전체적인 흐름 표현에 유리.
+
+### 3. Navier-Stokes Equation (나비에-스토크스 방정식)
+유체의 운동을 기술하는 가장 중요한 방정식입니다. `F = ma`의 유체 버전입니다.
+- **구성 요소:**
+    - **이류 (Advection):** 유체의 흐름에 따라 속도나 물질이 이동하는 현상. `-(v·∇)v`.
+    - **압력 (Pressure):** 높은 곳에서 낮은 곳으로 미는 힘. `-∇p`.
+    - **점성 (Viscosity):** 흐름을 저항하고 퍼뜨리는 힘. `μ∇²v`.
+    - **외력 (External Force):** 중력 등. `f`.
+- **식:** `∂v/∂t = -(v·∇)v - ∇p + μ∇²v + f`
+
+### 4. 기타 동역학 응용
+- **Cloth Simulation:** 질량-스프링 모델(Mass-Spring)을 격자 형태로 연결하여 천을 표현. 구조적(Structural), 전단(Shear), 굽힘(Bend) 스프링을 조합하여 질감 조절.
+- **Hair/Fur:** 머리카락 가닥을 체인 형태의 입자-스프링이나 강체 연쇄로 모델링.
 
 ---
 
 ## Ray Tracing
+
+### Ray Tracing Acceleration (가속화 기법) - ACG_C28_29 보강
+레이 트레이싱의 가장 큰 병목은 수백만 개의 광선과 장면 내 모든 물체 간의 교차 검사(Intersection Test)입니다. 이를 `O(N)`에서 `O(log N)` 수준으로 줄이기 위해 가속 구조(Acceleration Structure)가 필수적입니다.
+
+#### 1. Bounding Volumes (경계 볼륨)
+복잡한 물체를 단순한 기하학적 형태(구, 상자)로 감싸서, 광선이 이 볼륨과 충돌하지 않으면 내부의 물체와도 충돌하지 않음을 이용하여 연산을 건너뜁니다.
+- **Bounding Sphere (경계 구):** 중심과 반지름으로 정의. 검사가 가장 빠르지만, 길쭉한 물체는 빈 공간이 많아 효율이 떨어집니다.
+- **AABB (Axis-Aligned Bounding Box):** 축에 정렬된 상자(`x_min`, `x_max`, ...). 생성과 교차 검사가 빠르지만, 물체가 회전하면 상자를 다시 계산해야 하며 핏(Fit)이 느슨해질 수 있습니다.
+- **OBB (Oriented Bounding Box):** 물체와 함께 회전하는 상자. 물체에 딱 맞게(Tight) 감쌀 수 있어 교차 검사 횟수를 줄이지만, OBB 자체의 교차 검사 비용이 비쌉니다. (PCA 등을 이용해 생성)
+
+#### 2. Spatial Partitioning (공간 분할)
+공간 자체를 나누어 광선이 지나가는 영역(Voxel/Cell)에 있는 물체만 검사합니다.
+- **Uniform Grid (균일 격자):** 공간을 일정한 크기의 격자로 나눕니다. 구현이 쉽고 3D DDA 알고리즘으로 빠르게 탐색할 수 있습니다. "Teapot in a stadium" 문제(빈 공간이 많은 씬)에 취약합니다.
+- **Octree (옥트리):** 공간을 재귀적으로 8개의 작은 정육면체로 분할합니다. 빈 공간은 큰 노드로 두고 복잡한 공간만 깊게 분할하여 메모리를 절약합니다.
+- **K-d Tree:** 축에 수직인 평면으로 공간을 이진 분할합니다. 레이 트레이싱에서 매우 효율적이며 널리 사용됩니다. SAH(Surface Area Heuristic)를 사용하여 최적의 분할 위치를 결정합니다.
+
+#### 3. Bounding Volume Hierarchies (BVH)
+물체들을 트리 구조로 계층화합니다. 공간 분할과 달리 물체 기반 분할이므로 자식 노드끼리 영역이 겹칠 수 있습니다.
+- **장점:** 물체가 이동해도 트리 구조 자체를 유지하거나 일부만 업데이트(Refitting)하기 용이하여 **동적 씬(Dynamic Scene)**에 적합합니다. 현대의 실시간 레이 트레이싱(RTX 등)은 주로 BVH를 사용합니다.
+
+### Monte Carlo Integration (몬테 카를로 적분)
+렌더링 방정식(Rendering Equation)은 해석적으로 풀기 어렵기 때문에, 무작위 샘플링을 통해 근사값을 구하는 몬테 카를로 방법을 사용합니다. `E[f] ≈ (1/N) * Σ f(Xi)`
+- **Importance Sampling (중요도 샘플링):** 빛이 많이 들어올 것으로 예상되는 방향(예: 광원 방향, BRDF의 스펙큘러 로브 방향)으로 더 많은 샘플을 할당하여, 적은 샘플 수로도 노이즈를 효과적으로 줄이는 기법입니다.
 
 ### 기본 원리
 - 카메라에서 픽셀로 광선을 쏴서 교차하는 첫 번째 물체의 색상을 계산하는 방식.
@@ -712,50 +906,3 @@ NURBS의 유리식(나눗셈)은 계산을 복잡하게 만듭니다. 이를 해
 ### Path Tracing
 - 렌더링 방정식을 몬테카를로 방식으로 푸는 레이 트레이싱의 일반화된 형태.
 - 교차점에서 여러 방향으로 광선을 무작위 샘플링하여 빛을 추적.
-- **결과:** 간접광, 부드러운 그림자, 색상 번짐 등 매우 사실적인 전역 조명(Global Illumination) 효과를 얻을 수 있지만, 노이즈가 많아 많은 수의 샘플이 필요.
-
----
-
-## ACG_C09_Curves_IV: NURBS 곡선
-
-NURBS(Non-Uniform Rational B-Spline)는 B-Spline을 더욱 일반화한 형태로, 현재 컴퓨터 그래픽스와 CAD 분야의 표준적인 곡선/곡면 표현 방식입니다.
-
-### 1. NURBS의 정의: Rational의 의미
-
-- **Rational (유리식):** B-Spline의 정의에 **가중치(weight)**와 **나눗셈**이 추가된 것을 의미합니다.
-- **방정식:**
-  `P(t) = (Σ_{i=0}^{n} w_i * P_i * N_{i,k}(t)) / (Σ_{i=0}^{n} w_i * N_{i,k}(t))`
-  - `P_i`: 3D 공간의 제어점 `(x, y, z)`
-  - `w_i`: 각 제어점에 해당하는 스칼라 가중치
-  - `N_{i,k}(t)`: B-Spline 기저 함수
-
-- **B-Spline과의 관계:** 모든 가중치 `w_i`가 1이면, 분모는 B-Spline 기저 함수의 합(1)이 되므로 NURBS 곡선은 B-Spline 곡선과 동일해집니다. 즉, B-Spline은 NURBS의 특별한 경우입니다.
-
-### 2. 동차 좌표계 (Homogeneous Coordinates)를 이용한 표현
-
-NURBS의 유리식(나눗셈)은 계산을 복잡하게 만듭니다. 이를 해결하기 위해 **동차 좌표계**를 사용합니다.
-
-1.  **4D로 확장:** 3D 제어점 `P_i = (x_i, y_i, z_i)`를 가중치 `w_i`를 사용하여 4D 동차 좌표 `P_i^w = (w_i*x_i, w_i*y_i, w_i*z_i, w_i)`로 변환합니다.
-2.  **4D B-Spline 생성:** 이 4D 제어점들을 이용하여 표준적인 (Non-rational) B-Spline 곡선 `P^w(t)`를 생성합니다.
-    `P^w(t) = Σ_{i=0}^{n} P_i^w * N_{i,k}(t)`
-3.  **3D로 투영:** 계산된 4D 곡선 위의 점 `P^w(t) = (x, y, z, w)`를 마지막 `w` 컴포넌트로 나누어 다시 3D 공간으로 투영합니다.
-    `P(t) = (x/w, y/w, z/w)`
-
-- **장점:** 이 방식을 사용하면 복잡한 유리식을 직접 다루는 대신, 한 차원 높은 공간에서 표준 B-Spline 연산을 그대로 사용할 수 있어 구현과 계산이 훨씬 간단해집니다. 모든 변환(이동, 회전, 크기, 원근 투영)을 단일 행렬 곱으로 처리할 수 있게 됩니다.
-
-### 3. 가중치(Weight)의 역할
-
-- 가중치 `w_i`는 해당 제어점 `P_i`가 곡선을 얼마나 강하게 끌어당기는지를 결정합니다.
-    - **`w_i` > 1:** 곡선이 `P_i`에 더 가깝게 끌려옵니다.
-    - **`w_i` = 1:** 표준 B-Spline과 동일한 영향을 줍니다.
-    - **0 ≤ `w_i` < 1:** `P_i`의 영향력이 줄어들어 곡선이 제어점에서 더 멀어집니다.
-    - **`w_i` = 0:** 해당 제어점은 곡선에 아무런 영향을 주지 않습니다.
-    - **`w_i` < 0:** 거의 사용되지 않으며, 곡선이 제어점에서 멀리 벗어나는 등 예측하기 어려운 형태가 될 수 있습니다.
-
-### 4. NURBS의 장점: 원뿔 곡선(Conic Sections)의 정확한 표현
-
-- B-Spline을 포함한 일반적인 다항식 곡선은 원, 타원, 포물선, 쌍곡선과 같은 원뿔 곡선을 '근사'할 수는 있지만 '완벽하게' 표현하지는 못합니다.
-- **NURBS는 가중치를 조절하여 이러한 원뿔 곡선들을 수학적으로 정확하게 표현할 수 있습니다.**
-- 예를 들어, 3개의 제어점과 `k=3` 차수, 매듭 벡터 `T={0,0,0,1,1,1}`을 갖는 2차 NURBS 곡선에서, 양 끝 제어점의 가중치를 1로, 가운데 제어점의 가중치를 조절함으로써 원호를 정확하게 만들 수 있습니다.
-
-이러한 강력한 표현력 때문에 NURBS는 정밀한 모델링이 필수적인 CAD, CAM, 산업 디자인 분야의 표준으로 자리 잡았습니다.

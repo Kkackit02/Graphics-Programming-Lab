@@ -262,6 +262,16 @@ private:
                     app->lights[0].enabled = !app->lights[0].enabled;
                 }
             }
+            if (key == GLFW_KEY_K) {
+                if (!app->lights.empty()) {
+                    app->lights[1].enabled = !app->lights[1].enabled;
+                }
+            }
+            if (key == GLFW_KEY_J) {
+                if (!app->lights.empty()) {
+                    app->lights[2].enabled = !app->lights[2].enabled;
+                }
+            }
         }
         else if (action == GLFW_RELEASE) {
             app->keys[key] = false;
@@ -467,8 +477,10 @@ private:
         objects.push_back({ "models/cube.obj", glm::vec3(-5.0f, 3.5f, -15.0f), glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.8f, 0.8f, 0.8f) });
 
 
-        lights.resize(1);
-        lights[0] = { glm::vec3(0.0f, 29.0f, 0.0f), 250.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
+        lights.resize(3);
+        lights[0] = { glm::vec3(0.0f, 29.0f, 0.0f), 150.0f, glm::vec3(1.0f, 1.0f, 1.0f), 1 };
+        lights[1] = { glm::vec3(-15.0f, 29.0f, 0.0f), 250.0f, glm::vec3(1.0f, 0.0f, 0.0f), 1 };
+        lights[2] = { glm::vec3(15.0f, 29.0f, 0.0f), 250.0f, glm::vec3(0.0f, 1.0f, 0.0f), 1 };
 
         std::cout << "Scene: " << objects.size() << " objects, " << lights.size() << " lights" << std::endl;
 
