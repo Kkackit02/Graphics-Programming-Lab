@@ -1,222 +1,101 @@
-# Vulkan 학습 자료집: 03. 텍스처 및 기타 리소스
+# Vulkan 학습 자료집: 03. 텍스처 및 리소스 (상세 설명판)
 
-이 문서는 `수정_03Vulkan (2).pdf` 파일의 내용을 바탕으로, 3D 그래픽스의 핵심 요소인 **텍스처 매핑(Texture Mapping)**과 **뎁스 버퍼링(Depth Buffering)**에 대해 상세히 설명합니다. 시험에서 관련 개념을 빠르고 정확하게 찾아볼 수 있도록 구성되었습니다.
+이 문서는 `수정_03Vulkan (2).pdf` 파일의 내용을 바탕으로, 3D 객체에 생동감을 불어넣는 **텍스처 매핑(Texture Mapping)**과 3D 공간의 깊이를 올바르게 처리하는 **뎁스 버퍼링(Depth Buffering)**에 대해 상세한 비유와 설명을 덧붙인 자료입니다.
 
 ---
 
 ### 1. 학습 목표
 
-- **텍스처 매핑**: 3D 객체 표면에 2D 이미지를 입히는 전체 과정을 이해합니다.
-    - 이미지 파일 로딩, `VkImage`, `VkImageView`, `VkSampler`의 개념과 생성 방법을 학습합니다.
-    - Staging Buffer를 사용해 이미지를 GPU 메모리로 효율적으로 전송하는 방법을 익힙니다.
-    - 이미지 레이아웃(Image Layout)과 레이아웃 전환(Layout Transition)의 중요성을 이해합니다.
-- **뎁스 버퍼링**: 3D 씬에서 객체의 앞뒤 관계를 올바르게 처리하여 깨진 그래픽(Z-fighting)을 방지하는 방법을 배웁니다.
-    - 뎁스 버퍼(Depth Buffer)의 원리를 이해하고, 뎁스 이미지를 생성 및 설정하는 방법을 학습합니다.
-- **실습**: `stb_image` 라이브러리로 이미지를 로드하여 회전하는 3D 사각형에 텍스처를 입히고, 뎁스 버퍼링을 적용합니다.
+- **텍스처 매핑의 전체 과정 이해**: 밋밋한 3D 모델에 '옷 스티커(텍스처)'를 붙이는 과정을 단계별로 명확히 이해합니다.
+- **Vulkan 이미지 관련 객체 마스터**: `VkImage`, `VkImageView`, `VkSampler`가 각각 어떤 역할을 하는지 비유를 통해 확실히 구분합니다.
+- **이미지 레이아웃 전환의 '이유' 파악**: GPU 성능 최적화를 위해 왜 번거로운 레이아웃 전환 과정이 필수적인지 이해합니다.
+- **뎁스 버퍼링의 원리**: 3D 그래픽에서 물체의 앞뒤가 깨지지 않고 정상적으로 그려지는 원리를 '높이 지도' 비유로 학습합니다.
 
 ---
 
-### 2. 주요 개념 상세 설명: 텍스처 매핑 (Texture Mapping)
+### 2. 텍스처 매핑: 3D 모델에 옷 입히기
 
-텍스처 매핑은 밋밋한 3D 모델에 사실적인 표면을 입히는 과정입니다. 이를 위해 Vulkan에서는 여러 객체를 유기적으로 조합해야 합니다.
+텍스처 매핑은 3D 모델 표면에 2D 이미지를 적용하여 질감과 색상을 표현하는 기술입니다.
 
-#### **텍스처 매핑 전체 워크플로우**
+- **비유**: 밋밋한 회색 찰흙 인형(3D 모델)에 **'옷 스티커(텍스처)'**를 정교하게 붙여주는 과정과 같습니다. 이 과정을 위해서는 다음이 모두 필요합니다.
+    1.  **스티커 도안**: 화면에 보여줄 이미지 파일 (`.jpg`, `.png`)
+    2.  **인형 표면**: 스티커가 붙을 GPU 내의 특별한 공간 (`VkImage`)
+    3.  **스티커 붙이는 방법 설명서**: 스티커를 확대/축소하거나, 가장자리를 어떻게 처리할지에 대한 규칙 (`VkSampler`)
+    4.  **좌표**: 인형의 '어깨' 부분에 스티커의 '상표' 부분을 붙이는 것처럼, 모델의 각 정점과 이미지의 각 점을 연결하는 정보 (`UV 좌표` 또는 `TexCoord`)
 
-1.  **이미지 로드**: `stb_image` 같은 라이브러리를 사용해 이미지 파일(jpg, png 등)을 CPU 메모리로 로드.
-2.  **Staging Buffer 생성**: 로드한 픽셀 데이터를 GPU로 옮기기 위한 임시 버퍼(CPU에서 접근 가능)를 생성하고 데이터 복사.
-3.  **`VkImage` 생성**: 텍스처를 저장할 GPU 전용 이미지 객체(`VkImage`)를 생성.
-4.  **레이아웃 전환 (1)**: `VkImage`의 레이아웃을 '복사 대상'(`VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL`)으로 변경.
-5.  **버퍼에서 이미지로 복사**: Staging Buffer의 데이터를 `VkImage`로 복사.
-6.  **레이아웃 전환 (2)**: `VkImage`의 레이아웃을 '셰이더 읽기 전용'(`VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL`)으로 변경.
-7.  **`VkImageView` 생성**: `VkImage`의 특정 부분을 어떻게 바라볼지 정의하는 이미지 뷰 생성.
-8.  **`VkSampler` 생성**: 셰이더가 텍스처를 샘플링(색상 추출)할 방법을 정의하는 샘플러 생성 (필터링, 주소 지정 방식 등).
-9.  **디스크립터 업데이트**: 생성된 이미지 뷰와 샘플러를 디스크립터 셋에 연결하여 셰이더에서 사용할 수 있도록 함.
+#### **`VkImage` vs `VkBuffer`**
 
----
+둘 다 GPU 메모리 덩어리지만, `VkImage`는 1D, 2D, 3D 공간적 차원을 가진 데이터(주로 이미지)에 극도로 최적화되어 있습니다. GPU 하드웨어는 이미지의 2D 좌표(`UV`)를 주면, `VkBuffer`의 특정 인덱스를 찾는 것보다 훨씬 빠르게 해당 픽셀(텍셀)의 데이터를 찾아올 수 있는 특별한 기능이 내장되어 있습니다.
 
-#### **단계별 상세 설명**
+#### **이미지 레이아웃 전환: 사진 현상 과정**
 
-##### **1단계: 정점 데이터에 텍스처 좌표(TexCoord) 추가**
+GPU는 특정 작업을 수행할 때, 이미지 데이터가 메모리에 가장 효율적인 방식으로 배치되기를 기대합니다. 이 '배치 방식'이 바로 **이미지 레이아웃(Image Layout)**입니다. 따라서 작업의 종류에 따라 레이아웃을 직접 변경해주어야 합니다.
 
-셰이더에게 정점의 어느 위치에 텍스처의 어느 부분을 매핑할지 알려주기 위해 `Vertex` 구조체에 `texCoord` (`vec2`)를 추가합니다. 텍스처 좌표는 보통 (0,0)에서 (1,1) 사이의 값을 가집니다.
+- **비유**: 아날로그 **사진을 현상하는 과정**과 같습니다.
+    1.  `VK_IMAGE_LAYOUT_UNDEFINED`: **"방금 찍은 필름"**. 아직 아무 작업도 할 수 없는 초기 상태입니다.
+    2.  `VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL`: **"현상액에 담긴 사진"**. 외부로부터 이미지 데이터를 받아들일(복사될) 준비가 된 상태입니다. 이 상태에서는 셰이더가 읽는 등의 다른 작업을 할 수 없습니다.
+    3.  `VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL`: **"현상과 코팅을 마친 완성된 사진"**. 셰이더가 텍스처를 읽기에 가장 최적화된 상태입니다. 더 이상 내용을 수정할 수 없습니다.
 
-```cpp
-struct Vertex {
-    glm::vec2 pos;
-    glm::vec3 color;
-    glm::vec2 texCoord; // 텍스처 좌표 추가
-};
+- **`vkCmdPipelineBarrier`**: 이 단계들을 전환하는 명령입니다. **"필름을 현상액 통으로 옮기기", "현상된 사진을 건조대로 옮기기"** 와 같이, 한 작업이 완전히 끝나고 다음 작업을 안전하게 시작할 수 있도록 보장하는 '칸막이' 역할을 합니다. `srcAccessMask`(이전 작업)와 `dstAccessMask`(다음 작업)를 통해 작업 간의 의존성을 명확히 해줍니다.
 
-// 정점 데이터에 텍스처 좌표 값 추가
-const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 우측 하단
-    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},  // 좌측 하단
-    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},   // 좌측 상단
-    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}  // 우측 상단
-};
+#### **`VkImageView`: 사진을 담는 액자**
 
-// Vertex Input Attribute Description에 texCoord 추가
-attributeDescriptions[2].location = 2;
-attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
-```
+`VkImage`는 순수한 데이터 덩어리일 뿐입니다. `VkImageView`는 이 데이터를 어떻게 해석할지에 대한 '뷰' 또는 '설명서'를 제공합니다.
 
-##### **2단계: 이미지 로드 및 Staging Buffer 생성**
+- **비유**: 하나의 큰 파노라마 사진(`VkImage`)이 있을 때,
+    - "왼쪽 풍경만 보여주는 **액자**"
+    - "전체를 흑백 필터로 보여주는 **액자**"
+    - "사진의 알파 채널만 보여주는 **액자**"
+    처럼, `VkImageView`는 원본 데이터를 어떻게 바라볼지를 결정합니다. `VkImage`는 `VkImageView`를 통해 비로소 Vulkan에서 의미 있는 텍스처로 사용될 수 있습니다.
 
-`stb_image.h` 라이브러리를 포함하고, `stbi_load` 함수로 이미지 파일을 불러옵니다.
+#### **`VkSampler`: 돋보기와 그림 규칙**
 
-```cpp
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+샘플러는 셰이더가 텍스처 좌표를 가지고 `VkImageView`에서 색상을 추출(샘플링)할 때, 그 방법을 상세히 정의하는 규칙 객체입니다.
 
-int texWidth, texHeight, texChannels;
-// STBI_rgb_alpha: RGB 채널만 있어도 알파 채널(A)을 추가하여 4바이트로 정렬
-stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-VkDeviceSize imageSize = texWidth * texHeight * 4;
-
-// Staging Buffer 생성 및 데이터 복사
-VkBuffer stagingBuffer;
-VkDeviceMemory stagingBufferMemory;
-createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
-
-void* data;
-vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
-memcpy(data, pixels, static_cast<size_t>(imageSize));
-vkUnmapMemory(device, stagingBufferMemory);
-
-stbi_image_free(pixels); // 원본 픽셀 데이터는 해제
-```
-
-##### **3단계: `VkImage`와 `VkImageView` 생성**
-
-텍스처를 담을 `VkImage`와 이를 바라볼 `VkImageView`를 생성합니다.
-
-- **`VkImageCreateInfo`**: 이미지 생성 정보
-    - `imageType`: `VK_IMAGE_TYPE_2D` (2D 텍스처)
-    - `extent`: 이미지의 너비, 높이, 깊이.
-    - `format`: 픽셀 형식. `stbi_load`에서 `STBI_rgb_alpha`를 썼으므로 `VK_FORMAT_R8G8B8A8_SRGB`가 적합.
-    - `tiling`: `VK_IMAGE_TILING_OPTIMAL` (GPU에 최적화된 배치).
-    - `usage`: 이미지의 용도.
-        - `VK_IMAGE_USAGE_TRANSFER_DST_BIT`: 다른 버퍼로부터 데이터를 복사받을 수 있음.
-        - `VK_IMAGE_USAGE_SAMPLED_BIT`: 셰이더에서 샘플링(읽기)할 수 있음.
-- **`VkImageViewCreateInfo`**: 이미지 뷰 생성 정보
-    - `image`: 대상 `VkImage`.
-    - `viewType`: `VK_IMAGE_VIEW_TYPE_2D`.
-    - `format`: `VkImage`와 동일한 형식.
-    - `subresourceRange`: 이미지의 어느 부분을 뷰로 만들지 지정.
-
-##### **4단계: 이미지 레이아웃 전환과 데이터 복사**
-
-GPU는 작업을 최적화하기 위해 이미지의 메모리 레이아웃을 변경합니다. 따라서 작업에 맞는 레이아웃으로 직접 전환해주어야 합니다. 이 과정은 **파이프라인 배리어(Pipeline Barrier)**를 사용합니다.
-
-```cpp
-// 헬퍼 함수: transitionImageLayout
-void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
-    VkCommandBuffer commandBuffer = beginSingleTimeCommands();
-
-    VkImageMemoryBarrier barrier{};
-    barrier.oldLayout = oldLayout; // 이전 레이아웃
-    barrier.newLayout = newLayout; // 목표 레이아웃
-    barrier.image = image;
-    // ... (subresourceRange 등 설정)
-
-    // 어떤 파이프라인 단계 사이에 배리어를 둘지 결정
-    // 예: TRANSFER 단계 이후에 FRAGMENT_SHADER 단계가 이 리소스에 접근해야 함
-    sourceStage = ...;
-    destinationStage = ...;
-    barrier.srcAccessMask = ...; // 이전 작업의 접근 유형
-    barrier.dstAccessMask = ...; // 다음 작업의 접근 유형
-
-    vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 0, 0, nullptr, 0, nullptr, 1, &barrier);
-
-    endSingleTimeCommands(commandBuffer);
-}
-
-// 실제 사용
-// 1. 복사 대상으로 레이아웃 변경
-transitionImageLayout(textureImage, ..., VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-// 2. Staging Buffer에서 VkImage로 복사
-copyBufferToImage(stagingBuffer, textureImage, ...);
-// 3. 셰이더 읽기용으로 레이아웃 변경
-transitionImageLayout(textureImage, ..., VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-```
-
-##### **5단계: `VkSampler` 생성**
-
-샘플러는 셰이더가 텍스처 좌표로 텍스처를 읽을 때 어떻게 동작할지 정의합니다.
-
-- **`VkSamplerCreateInfo`**:
-    - `magFilter`, `minFilter`: 텍스처를 확대/축소할 때 사용할 필터링 (`VK_FILTER_LINEAR`는 선형 보간).
-    - `addressModeU/V/W`: 텍스처 좌표가 [0, 1] 범위를 벗어났을 때 처리 방식.
-        - `VK_SAMPLER_ADDRESS_MODE_REPEAT`: 텍스처를 반복.
-        - `VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE`: 경계의 색상 값을 사용.
-    - `anisotropyEnable`: 비등방성 필터링 사용 여부 (더 높은 품질의 텍스처 렌더링).
-
-##### **6단계: 디스크립터 및 셰이더 수정**
-
-- **디스크립터**: `VkDescriptorSetLayout`에 `VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER` 타입의 바인딩을 추가합니다. 이는 이미지 뷰와 샘플러를 하나로 묶어 셰이더에 전달합니다.
-- **버텍스 셰이더**: 정점의 텍스처 좌표(`inTexCoord`)를 프래그먼트 셰이더로 넘겨줍니다.
-    ```glsl
-    layout(location = 2) in vec2 inTexCoord;
-    layout(location = 1) out vec2 fragTexCoord; // 프래그먼트 셰이더로 전달
-
-    void main() {
-        // ...
-        fragTexCoord = inTexCoord;
-    }
-    ```
-- **프래그먼트 셰이더**: `sampler2D` 유니폼을 선언하고, `texture()` 함수를 사용해 넘어온 텍스처 좌표로 색상을 샘플링합니다.
-    ```glsl
-    layout(binding = 1) uniform sampler2D texSampler;
-    layout(location = 1) in vec2 fragTexCoord;
-    layout(location = 0) out vec4 outColor;
-
-    void main() {
-        outColor = texture(texSampler, fragTexCoord);
-    }
-    ```
+- **비유**: 텍스처라는 그림을 **'돋보기'**로 들여다볼 때의 규칙서입니다.
+    - **필터링 (`magFilter`, `minFilter`)**: 그림을 너무 가까이서 보거나(확대) 멀리서 볼 때(축소), 픽셀 사이의 색을 어떻게 부드럽게 섞을지(선형 보간, `VK_FILTER_LINEAR`) 또는 그냥 가장 가까운 픽셀 색을 보여줄지(최단거리, `VK_FILTER_NEAREST`) 결정합니다.
+    - **주소 모드 (`addressModeU/V/W`)**: 돋보기가 그림 범위를 벗어났을 때 어떻게 할지 결정합니다.
+        - `REPEAT`: 그림을 바둑판처럼 반복합니다. (벽돌 벽 텍스처 등)
+        - `CLAMP_TO_EDGE`: 그림의 가장자리 색을 계속 늘여서 보여줍니다.
+        - `CLAMP_TO_BORDER`: 지정된 특정 색상(예: 투명)으로 채웁니다.
 
 ---
 
-### 3. 주요 개념 상세 설명: 뎁스 버퍼링 (Depth Buffering)
+### 3. 뎁스 버퍼링 (Depth Buffering): 3D 공간의 질서 잡기
 
-뎁스 버퍼링(또는 Z-버퍼링)은 3D 씬에서 어떤 픽셀이 카메라에 더 가까이 있는지 판단하여 올바른 픽셀만 그리도록 하는 기술입니다.
+3D 씬을 렌더링할 때, GPU는 삼각형을 그리는 순서에 따라 물체를 덮어쓰기 때문에, 멀리 있는 물체가 가까이 있는 물체를 가리는 현상이 발생할 수 있습니다. 뎁스 버퍼링은 이 문제를 해결하여 물체의 앞뒤 관계를 올바르게 표현합니다.
 
-#### **뎁스 버퍼링 워크플로우**
+- **비유**: 3D 씬을 위에서 내려다본 **'높이 지도(Height Map)'** 또는 **'모래성 쌓기'**와 같습니다.
+    1.  화면의 모든 픽셀에 해당하는, 매우 큰 값(가장 멀리 있음)으로 채워진 '높이 지도'(`VkImage` for Depth)를 준비합니다.
+    2.  첫 번째 삼각형을 그리려 할 때, 해당 픽셀들의 깊이(카메라로부터의 거리)를 계산합니다.
+    3.  이 깊이 값을 '높이 지도'의 해당 위치 값과 비교합니다.
+    4.  **만약 새로 그릴 픽셀이 더 가깝다면 (깊이 값이 더 작다면)**, 해당 픽셀을 그리고 '높이 지도'의 값을 이 새로운 깊이 값으로 업데이트합니다. (더 높은 모래성을 쌓고 높이를 기록)
+    5.  **만약 새로 그릴 픽셀이 더 멀다면 (깊이 값이 더 크다면)**, 이미 앞에 무언가 있다는 뜻이므로, 해당 픽셀을 **그리지 않고 무시**합니다. (이미 쌓인 모래성보다 낮으므로 묻혀버림)
 
-1.  **뎁스 이미지 생성**: 깊이 값을 저장할 전용 `VkImage`와 `VkImageView`를 생성합니다.
-    - **포맷**: `VK_FORMAT_D32_SFLOAT`, `VK_FORMAT_D24_UNORM_S8_UINT` 등 깊이 전용 포맷을 사용.
-    - **용도**: `VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT`.
-2.  **렌더 패스 수정**: `VkRenderPass`에 뎁스 버퍼를 위한 `VkAttachmentDescription`을 추가합니다.
-    - `loadOp`: `VK_ATTACHMENT_LOAD_OP_CLEAR` (매 프레임 시작 시 깊이 버퍼를 1.0(가장 먼 값)으로 초기화).
-    - `storeOp`: `VK_ATTACHMENT_STORE_OP_DONT_CARE` (렌더링이 끝나면 깊이 값은 필요 없으므로 저장하지 않음).
-    - `finalLayout`: `VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL`.
-3.  **서브패스 수정**: `VkSubpassDescription`에 `pDepthStencilAttachment`를 설정하여 뎁스 어태치먼트를 서브패스에 연결합니다.
-4.  **프레임버퍼 수정**: `VkFramebuffer` 생성 시, 컬러 이미지 뷰와 함께 뎁스 이미지 뷰를 어태치먼트로 추가합니다.
-5.  **그래픽스 파이프라인 수정**: `VkPipelineDepthStencilStateCreateInfo` 구조체를 설정하여 깊이 테스트를 활성화합니다.
-    - `depthTestEnable`: `VK_TRUE`.
-    - `depthWriteEnable`: `VK_TRUE`.
-    - `depthCompareOp`: `VK_COMPARE_OP_LESS` (새로 그릴 픽셀의 깊이 값이 기존 값보다 작을 때(더 가까울 때)만 픽셀을 그림).
+이 과정을 모든 픽셀에 대해 수행하면, 최종적으로는 카메라에 가장 가까운 물체들만 화면에 남게 됩니다.
+
+#### **뎁스 버퍼링 구현 단계**
+
+1.  **뎁스용 `VkImage`와 `VkImageView` 생성**: 컬러 이미지와 별개로, 깊이 정보를 저장할 전용 이미지와 뷰를 만듭니다. `VK_FORMAT_D32_SFLOAT` 같은 깊이 전용 포맷을 사용합니다.
+2.  **`VkRenderPass` 수정**: 렌더 패스에 '컬러 어태치먼트' 외에 '뎁스 어태치먼트'를 추가합니다.
+    - `loadOp`: `VK_ATTACHMENT_LOAD_OP_CLEAR`. 매 프레임 시작 시, 높이 지도를 가장 높은 값(1.0)으로 깨끗이 밀어버립니다.
+    - `storeOp`: `VK_ATTACHMENT_STORE_OP_DONT_CARE`. 렌더링이 끝나면 이 깊이 정보는 다음 프레임에 필요 없으므로 저장하지 않아도 됩니다.
+3.  **`VkFramebuffer` 수정**: 프레임버퍼가 컬러 이미지 뷰와 뎁스 이미지 뷰, 두 개를 모두 가리키도록 설정합니다.
+4.  **파이프라인 수정**: `VkPipelineDepthStencilStateCreateInfo`에서 깊이 테스트를 활성화(`depthTestEnable = VK_TRUE`)하고, 비교 연산을 `VK_COMPARE_OP_LESS` (더 작으면 통과)로 설정합니다.
 
 ---
 
 ### 4. 시험 대비 핵심 요약
 
-- **텍스처 매핑 순서**: `stbi_load` -> Staging Buffer -> `VkImage` -> Layout Transition (Copy Dst) -> `copyBufferToImage` -> Layout Transition (Shader Read) -> `VkImageView` -> `VkSampler` -> Descriptor Update.
-- **이미지 레이아웃 전환**: `vkCmdPipelineBarrier`와 `VkImageMemoryBarrier`를 사용하며, `oldLayout`, `newLayout`, `srcAccessMask`, `dstAccessMask`가 핵심 파라미터.
-    - **복사 전**: `VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL`
-    - **셰이더 읽기 전**: `VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL`
-- **핵심 텍스처 객체**:
-    - `VkImage`: 실제 텍셀 데이터가 저장되는 GPU 객체.
-    - `VkImageView`: `VkImage`를 어떻게 해석할지에 대한 뷰.
-    - `VkSampler`: 텍스처를 어떻게 읽을지에 대한 규칙(필터링, 주소모드).
-- **뎁스 버퍼링 설정**:
-    1.  **뎁스용 `VkImage` / `VkImageView` 생성**: 깊이 포맷(`D32_SFLOAT` 등) 사용.
-    2.  **`VkRenderPass`에 뎁스 어태치먼트 추가**: `loadOp`은 `CLEAR`, `storeOp`은 `DONT_CARE`.
-    3.  **`VkFramebuffer`에 뎁스 뷰 추가**.
-    4.  **파이프라인에서 `depthTestEnable` 활성화**.
-- **셰이더에서의 텍스처 처리**:
-    - **Vertex Shader**: `layout(location = ...)`으로 UV 좌표를 입력받아 `out` 변수로 Fragment Shader에 전달.
-    - **Fragment Shader**: `layout(binding = ...)`으로 `sampler2D`를 받고, `texture()` 함수로 색상 추출.
+- **텍스처 매핑의 핵심 객체와 역할**:
+    - `stbi_load`: 파일 -> CPU 메모리
+    - `Staging Buffer`: CPU 메모리 -> GPU 임시 버퍼
+    - `VkImage`: 텍스처 데이터의 최종 목적지 (GPU 고성능 메모리)
+    - `VkImageView`: `VkImage`를 해석하는 방법 (액자)
+    - `VkSampler`: `VkImageView`를 읽는 방법 (돋보기 규칙)
+    - `Combined Image Sampler`: `ImageView` + `Sampler`를 묶어 셰이더에 전달하는 디스크립터.
+- **이미지 레이아웃 전환은 왜?**: GPU가 각 작업(복사, 셰이더 읽기)에 가장 최적화된 메모리 구조를 사용하도록 하여 **성능을 극대화**하기 위함. `vkCmdPipelineBarrier`를 통해 수행.
+- **뎁스 버퍼링은 왜?**: 3D 공간에서 **물체의 앞뒤 관계를 정확히** 표현하기 위함. Z-fighting 현상을 막는다.
+- **뎁스 버퍼링 구현 4단계**: 1) 뎁스 이미지/뷰 생성, 2) 렌더패스에 뎁스 어태치먼트 추가, 3) 프레임버퍼에 뎁스 뷰 연결, 4) 파이프라인에서 뎁스 테스트 활성화.
 
-이 문서는 텍스처와 뎁스 버퍼라는 두 가지 중요한 주제를 다룹니다. 각 단계에서 어떤 Vulkan 객체가 필요하고, 어떤 순서로 생성 및 설정되어야 하는지를 중심으로 학습하면 시험에 큰 도움이 될 것입니다.
+이 자료를 통해 텍스처와 뎁스 버퍼가 어떤 원리로 작동하며, Vulkan에서 이를 구현하기 위해 왜 그토록 많은 객체와 단계가 필요한지에 대한 큰 그림을 이해할 수 있을 것입니다.
