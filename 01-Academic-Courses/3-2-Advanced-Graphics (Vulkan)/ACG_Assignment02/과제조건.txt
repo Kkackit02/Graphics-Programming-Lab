@@ -1,0 +1,17 @@
+Create an ray-traced indoor scene using Vulkan
+
+ 
+
+- Table, Chair 및 5개 이상의 객체와 벽/바닥으로 구성된 3D 실내 공간을 구성하시오.
+
+  ; 5개 이상 객체 구성 5점
+
+  ; 자유 시점 이동 5점
+
+- 구성된 공간을 Vulkan 을 이용하여 3차원 렌더링 하시오. 
+
+  ; Ray tracing 을 통하여 1개 이상의 광원에 대하여 렌더링 하시오.
+
+  ; 1개 이상 광원 효과 시각화 5점 (광원을 on/off 할수 있으면 5점, 아니면 3점)
+
+  ; Ray tracing 을 통항 결과의 정확성 5점

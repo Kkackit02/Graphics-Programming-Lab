@@ -1,0 +1,35 @@
+
+## 프로그래밍 과제 #1 보고서
+
+1. 구현 방법
+3D 객체인 PiggyBank와 Cube를 로드하고, Hermite로 구현된 Spline Curve를 txt 형태로 3차원의 control Point를 입력받아 화면에 출력하도록 하였습니다.
+spline curve의 경로 좌표를 따라 Cube가 따라 움직일 수 있도록 하였습니다.
+
+1)OBJ_Loader 라이브러리를 활용하여 `.obj` 파일(예: PiggyBank.obj, cube.obj)을 로드합니다. 
+2) 다양한 객체들의 데이터를 관리하고 화면에 그리기 편리하게 하기 위해서 'Object' 클래스를 구현하였습니다. 'Object' 클래스는 Loader를 통해 로드된 메쉬 데이터를 관리합니다.
+객체를 관리하기 위해서 여러 메소드를 정의하였는데
+InitFromMesh() 함수를 통해 VAO , VBO, Texture 파일을 로드합니다. 텍스처는 stb_image 라이브러리를 사용하였습니다.
+이러한 초기화 함수외에도 화면에 출력하는 기능과 animation을 위한 rotate 함수, spline 곡선을 따라 움직이도록 하기 위해서 좌표값으로 객체의 position을 변경하는 함수를 구현하였습니다.
+
+
+쉐이더는 크게 3 종류로 구현하였습니다.
+객체를 위한 VertexShader.txt, FragmentShader.txt 
+Hermite 스플라인을 위한 Spline_VertexShader.txt, Spline_FragmentShader.txt, Spline_GeometryShader.txt, 
+Control Point을 위한 Point_VertexShader.txt, Point_FragmentShader.txt 
+
+객체는 위한 쉐이더는 그동안 많이 사용해온 Phong Shading을 지원하고 texture 파일이 있다면 base color로 texture의 색상값을 반영하도록 구현하였습니다.
+Hermite를 위한 쉐이더는 기본적으로 txt에서 받은 control point 좌표를 받아 geometry shader로 넘기며, geometry shader에서 각 controlpoint 사이의 간격을 100으로 지정해 선분을 이으며, 선분의 좌표는 강의자료에 있는 Hermite 자료를 참고하여 작성하였습니다.
+
+
+2. 구현 환경
+운영체제 : Window 11
+컴파일러 : Visual Studio 2022 
+- 사용된 opengGL라이브러리 freeglut , glew, glm
+- 사용된 openSource 라이브러리 : OBJ_Loader(#https://github.com/Bly7/OBJ-Loader), stb_image(https://github.com/nothings/stb)
+
+
+
+
+### 3. 스크린샷
+
+[여기에 스크린샷을 삽입하세요. 여러 장의 스크린샷을 추가하거나, 애니메이션이 포함된 경우 비디오 링크를 추가할 수 있습니다.]

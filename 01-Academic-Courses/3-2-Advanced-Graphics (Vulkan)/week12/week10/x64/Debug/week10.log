@@ -1,0 +1,5 @@
+﻿  ex03.cpp
+C:\Users\JungGeunnyeong\Documents\Visual Studio 2022\Libraries\glfw-3.4.bin.WIN64\include\GLFW\glfw3.h(3235,1): warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+  (compiling source file 'ex03.cpp')
+  
+  week10.vcxproj -> D:\GitClone\AdvanceComputerGraphic\AdvanceCG\week12\x64\Debug\week10.exe
