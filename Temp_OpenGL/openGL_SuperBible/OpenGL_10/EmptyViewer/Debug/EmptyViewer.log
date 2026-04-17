@@ -1,0 +1,8 @@
+﻿  main.cpp
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_10\EmptyViewer\2.cpp(71,21): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_10\EmptyViewer\2.cpp(74,21): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+  EmptyViewer.vcxproj -> D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_10\bin\EmptyViewer.exe

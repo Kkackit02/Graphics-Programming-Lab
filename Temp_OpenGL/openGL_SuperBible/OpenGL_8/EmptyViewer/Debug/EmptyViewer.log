@@ -1,0 +1,5 @@
+﻿  main.cpp
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_8\EmptyViewer\8-1.cpp(128,22): warning C4566: character represented by universal-character-name '\u2013' cannot be represented in the current code page (949)
+  (compiling source file 'main.cpp')
+  
+  EmptyViewer.vcxproj -> D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_8\bin\EmptyViewer.exe

@@ -1,0 +1,17 @@
+﻿  main.cpp
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_3\EmptyViewer\3-8.cpp(49,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_3\EmptyViewer\3-8.cpp(50,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_3\EmptyViewer\3-8.cpp(67,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_3\EmptyViewer\3-8.cpp(68,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_3\EmptyViewer\3-8.cpp(131,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  (compiling source file 'main.cpp')
+  
+  EmptyViewer.vcxproj -> D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_3\bin\EmptyViewer.exe

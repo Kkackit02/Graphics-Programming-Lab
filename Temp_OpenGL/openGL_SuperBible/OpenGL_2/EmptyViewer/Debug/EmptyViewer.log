@@ -1,0 +1,5 @@
+﻿  main.cpp
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_1\EmptyViewer\2-3.cpp(105,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  (compiling source file 'main.cpp')
+  
+  EmptyViewer.vcxproj -> D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_1\bin\EmptyViewer.exe

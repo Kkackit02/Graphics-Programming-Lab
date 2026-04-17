@@ -1,0 +1,32 @@
+﻿  main.cpp
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(49,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(50,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(78,16): warning C4244: 'initializing': conversion from 'GLfloat' to 'int', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(78,46): warning C4244: '+=': conversion from 'GLfloat' to 'int', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(79,20): warning C4244: 'initializing': conversion from 'GLfloat' to 'int', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(79,50): warning C4244: '+=': conversion from 'GLfloat' to 'int', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(85,30): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(85,24): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(86,38): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\EmptyViewer\6-5.cpp(88,24): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+  EmptyViewer.vcxproj -> D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_6\bin\EmptyViewer.exe

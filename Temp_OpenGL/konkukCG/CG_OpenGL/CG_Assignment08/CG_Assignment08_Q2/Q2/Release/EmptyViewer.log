@@ -1,0 +1,13 @@
+﻿  load_mesh.cpp
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(88,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(89,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(90,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(104,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(105,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\GitClone\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(106,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Q2.cpp
+  Generating code
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+  All 559 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  EmptyViewer.vcxproj -> D:\GitClone\CG_Assignment08\CG_Assignment08_Q2\bin\Q2.exe

@@ -1,0 +1,92 @@
+﻿  main.cpp
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(43,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(43,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(125,30): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(125,24): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(126,37): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(126,26): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(127,39): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(127,26): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(128,32): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(128,24): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(141,21): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(160,21): warning C4305: 'argument': truncation from 'double' to 'float'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(160,16): warning C4305: 'argument': truncation from 'double' to 'float'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(199,21): warning C4305: 'argument': truncation from 'double' to 'float'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(199,16): warning C4305: 'argument': truncation from 'double' to 'float'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(229,23): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(229,26): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(229,29): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(234,46): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(234,49): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(234,52): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(234,71): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(234,74): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(234,77): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(240,49): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(240,52): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(240,55): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(240,75): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(240,78): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\EmptyViewer\9-2.cpp(240,81): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+  (compiling source file 'main.cpp')
+  
+  EmptyViewer.vcxproj -> D:\GitClone\OpenGL_API_Practice\openGL_SuperBible\OpenGL_9\bin\EmptyViewer.exe

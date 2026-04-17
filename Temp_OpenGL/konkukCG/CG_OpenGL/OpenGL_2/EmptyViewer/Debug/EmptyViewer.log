@@ -1,0 +1,5 @@
+﻿Main_EmptyViewer.obj : error LNK2019: unresolved external symbol __imp___invalid_parameter referenced in function "void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned int)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPAXI@Z)
+Main_EmptyViewer.obj : error LNK2019: unresolved external symbol __imp___CrtDbgReport referenced in function "void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned int)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPAXI@Z)
+msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp___free_dbg referenced in function "public: static void __cdecl std::_Fac_node::operator delete(void *)" (??3_Fac_node@std@@SAXPAX@Z)
+msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp___malloc_dbg referenced in function "public: static void * __cdecl std::_Fac_node::operator new(unsigned int)" (??2_Fac_node@std@@SAPAXI@Z)
+D:\GitClone\OpenGL_API_Practice\OpenGL\bin\EmptyViewer.exe : fatal error LNK1120: 4 unresolved externals
