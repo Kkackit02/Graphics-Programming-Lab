@@ -1,0 +1,70 @@
+﻿  load_mesh.cpp
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(37,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(88,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(89,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(90,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(104,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(105,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(106,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(125,9): warning C4477: 'printf' : 서식 문자열 '%lu'에 'unsigned long' 형식의 인수가 필요하지만 variadic 인수 2의 형식이 'unsigned __int64'입니다.
+  D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(125,9):
+  서식 문자열에서 '%zu'을(를) 사용하는 것이 좋습니다.
+  
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(125,9): warning C4477: 'printf' : 서식 문자열 '%lu'에 'unsigned long' 형식의 인수가 필요하지만 variadic 인수 3의 형식이 'unsigned __int64'입니다.
+  D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(125,9):
+  서식 문자열에서 '%zu'을(를) 사용하는 것이 좋습니다.
+  
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(125,9): warning C4477: 'printf' : 서식 문자열 '%lu'에 'unsigned long' 형식의 인수가 필요하지만 variadic 인수 4의 형식이 'unsigned __int64'입니다.
+  D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\load_mesh.cpp(125,9):
+  서식 문자열에서 '%zu'을(를) 사용하는 것이 좋습니다.
+  
+  Q2.cpp
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\Q2\Q2.cpp(357,50): warning C4267: '인수': 'size_t'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwSwapBuffers
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewEnableVertexAttribArray
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewBindVertexArray
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewBeginQuery
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewUseProgram
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwSetFramebufferSizeCallback
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewVertexAttribPointer
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGetShaderiv
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewCompileShader
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewCreateShader
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewBindBuffer
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewCreateProgram
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwGetKey
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGetShaderInfoLog
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGetProgramiv
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwTerminate
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwPollEvents
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwInit
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewDeleteVertexArrays
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwSetWindowShouldClose
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewUniform1f
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwCreateWindow
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwWindowHint
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGetUniformLocation
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwMakeContextCurrent
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewBufferData
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewAttachShader
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGetQueryObjectiv
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewDeleteProgram
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewShaderSource
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGenVertexArrays
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwDestroyWindow
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewUniformMatrix4fv
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwSetWindowTitle
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glewExperimental
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewEndQuery
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewDetachShader
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGetProgramInfoLog
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGenBuffers
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewDeleteShader
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewUniform4fv
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewLinkProgram
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glfwWindowShouldClose
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp_glewInit
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewDeleteBuffers
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewUniform3fv
+Q2.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___glewGenQueries
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\bin\Q2.exe : fatal error LNK1120: 47개의 확인할 수 없는 외부 참조입니다.

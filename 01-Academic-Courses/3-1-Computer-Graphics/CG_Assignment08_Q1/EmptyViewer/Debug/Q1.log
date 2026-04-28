@@ -1,0 +1,4 @@
+﻿  Q1.cpp
+D:\Git\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\Q1.cpp(156,26): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q1\EmptyViewer\Q1.cpp(161,26): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  Q1.vcxproj -> D:\Git\CG_Assignment08\CG_Assignment08_Q1\bin\Q1.exe

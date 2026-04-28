@@ -1,0 +1,16 @@
+﻿  load_mesh.cpp
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\EmptyViewer\load_mesh.cpp(88,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\EmptyViewer\load_mesh.cpp(89,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\EmptyViewer\load_mesh.cpp(90,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\EmptyViewer\load_mesh.cpp(104,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\EmptyViewer\load_mesh.cpp(105,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\EmptyViewer\load_mesh.cpp(106,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Main_Renderer.cpp
+  코드를 생성하고 있습니다...
+load_mesh.obj : error LNK2019: __imp___invalid_parameter"void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned int)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPAXI@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+Main_Renderer.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___invalid_parameter
+load_mesh.obj : error LNK2019: __imp___CrtDbgReport"void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned int)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPAXI@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+Main_Renderer.obj : error LNK2001: 확인할 수 없는 외부 기호 __imp___CrtDbgReport
+msvcprtd.lib(locale0_implib.obj) : error LNK2019: __imp___free_dbg"public: static void __cdecl std::_Fac_node::operator delete(void *)" (??3_Fac_node@std@@SAXPAX@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+msvcprtd.lib(locale0_implib.obj) : error LNK2019: __imp___malloc_dbg"public: static void * __cdecl std::_Fac_node::operator new(unsigned int)" (??2_Fac_node@std@@SAPAXI@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+D:\Git\CG_Assignment08\CG_Assignment08_Q2\bin\EmptyViewer.exe : fatal error LNK1120: 4개의 확인할 수 없는 외부 참조입니다.
