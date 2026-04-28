@@ -2,6 +2,8 @@
 
 # 🖥️ Graphics Programming Lab
 
+<img src="01-Academic-Courses/3-2-Advanced-Computer-Graphics/ACG_HomeWork3/202112346%20정근녕%20제출(Assignment1)/Spline%20Image.png" width="800" alt="Graphics Lab Thumbnail"/>
+
 ![C++](https://img.shields.io/badge/C%2B%2B-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
 ![OpenGL](https://img.shields.io/badge/OpenGL-5586A4?style=flat-square&logo=opengl&logoColor=white)
 ![Vulkan](https://img.shields.io/badge/Vulkan-AC162C?style=flat-square&logo=vulkan&logoColor=white)
@@ -81,23 +83,26 @@ Graphics-Programming-Lab/
 
 <table>
 <thead>
-<tr><th>과제</th><th>주제</th><th>핵심 구현</th></tr>
+<tr><th>과제</th><th>주제</th><th>핵심 구현</th><th>결과물</th></tr>
 </thead>
 <tbody>
 <tr>
 <td><b>HomeWork 2</b></td>
 <td>기하학 변환 & 장면 관리</td>
 <td>GLM 행렬 변환 · OBJ 로딩 · Scene Graph · Geometry / Fragment Shader</td>
+<td>-</td>
 </tr>
 <tr>
 <td><b>HomeWork 3</b></td>
 <td>스플라인 경로 애니메이션</td>
 <td>Catmull-Rom Spline · Geometry Shader · 제어점 파일 로드 · Phong 조명</td>
+<td><img src="01-Academic-Courses/3-2-Advanced-Computer-Graphics/ACG_HomeWork3/202112346%20정근녕%20제출(Assignment1)/Spline%20Image.png" width="200"/></td>
 </tr>
 <tr>
 <td><b>Assignment 2</b></td>
 <td>Vulkan Hardware Ray Tracing</td>
 <td>VK_KHR_ray_tracing · SPIR-V 셰이더 · BLAS/TLAS · 실내 씬 (5개 오브젝트 + 광원)</td>
+<td>-</td>
 </tr>
 </tbody>
 </table>
